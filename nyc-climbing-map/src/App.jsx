@@ -1,12 +1,78 @@
-import { useState } from 'react'
+import { useState, useMemo } from "react";
+import * as d3 from "d3";
 
-function App() {
+import MapLiteral from "./components/MapLiteral.jsx";
+import Legend from "./components/Legend.jsx";
+
+import { buildLinePaths } from "./utilities/buildLiteralPaths.js";
+
+import gymData from "./data/nyc-climbing-gyms.json";
+import nycBoroughs from "./data/Borough_Boundaries_20260720.json"; 
+
+const WIDTH = 800;
+const HEIGHT = 900;
+
+export default function App() {
+  const [hoveredId, setHoveredId] = useState(null);
+
+  const projection = useMemo(
+    () =>
+      d3
+        .geoMercator()
+        .center([-73.94, 40.74])
+        .scale(140000)
+        .translate([WIDTH / 2, HEIGHT / 2]),
+    []
+  );
+
+  const pathGenerator = useMemo(() => d3.geoPath(projection), [projection]);
+
+  const stations = useMemo(
+    () =>
+      gymData.gyms.map((gym) => {
+        const [x, y] = projection([gym.coordsGeo.lng, gym.coordsGeo.lat]);
+        return { ...gym, x, y };
+      }),
+    [projection]
+  );
+
+  const hoveredGym = stations.find((s) => s.id === hoveredId) ?? null;
+
+  const linePaths = useMemo(
+    () => buildLinePaths(stations, gymData.lineSystems),
+    [stations]
+  );
 
   return (
-    <>
-      sim sim salabim
-    </>
-  )
-}
+    <div className="w-full h-screen flex flex-col bg-black">
+      {/* Vignelli-poster title bar */}
+      <header className="h-16 flex items-center px-6 bg-black shrink-0">
+        <h1 className="text-white text-lg md:text-xl font-bold uppercase tracking-wide">
+          {gymData.meta.title}
+        </h1>
+      </header>
 
-export default App
+      {/* Body: map canvas + legend sidebar */}
+      <div className="flex flex-1 min-h-0">
+        <div className="flex-1 flex items-center justify-center bg-[#f5f0e8] overflow-auto">
+          <MapLiteral
+            width={WIDTH}
+            height={HEIGHT}
+            boroughFeatures={nycBoroughs.features}
+            pathGenerator={pathGenerator}
+            stations={stations}
+            hoveredId={hoveredId}
+            onHoverStation={setHoveredId}
+            linePaths={linePaths}
+          />
+        </div>
+
+        <Legend
+          lineSystems={gymData.lineSystems}
+          description={gymData.meta.description}
+          // hoveredGym={hoveredGym}
+        />
+      </div>
+    </div>
+  );
+}
