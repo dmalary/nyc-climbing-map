@@ -14,6 +14,7 @@ const HEIGHT = 900;
 
 export default function App() {
   const [hoveredId, setHoveredId] = useState(null);
+  const [selectedLineId, setSelectedLineId] = useState(null);
 
   const projection = useMemo(
     () =>
@@ -64,13 +65,15 @@ export default function App() {
             hoveredId={hoveredId}
             onHoverStation={setHoveredId}
             linePaths={linePaths}
+            selectedLineId={selectedLineId}
           />
         </div>
 
         <Legend
           lineSystems={gymData.lineSystems}
           description={gymData.meta.description}
-          // hoveredGym={hoveredGym}
+          selectedLineId={selectedLineId}
+          onSelectLine={setSelectedLineId}
         />
       </div>
     </div>

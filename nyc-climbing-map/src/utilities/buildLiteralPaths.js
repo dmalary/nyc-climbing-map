@@ -23,7 +23,14 @@ export function buildLinePaths(stations, lineSystems) {
         ? line.stationOrder.map((id) => members.find((s) => s.id === id)).filter(Boolean)
         : orderByBoroughThenNorthSouth(members);
 
-      lineRoutes.push({ id: line.id, tierId, name: line.name, color: line.color, ordered });
+      lineRoutes.push({ 
+        id: 
+        line.id, tierId, 
+        name: line.name, 
+        color: line.color, 
+        shortLabel: line.shortLabel,
+        ordered 
+      });
     }
   }
 
@@ -69,7 +76,9 @@ export function buildLinePaths(stations, lineSystems) {
       tierId: route.tierId,
       name: route.name,
       color: route.color,
+      shortLabel: route.shortLabel,
       d: lineGen(samples),
+      points: samples,
       startStation: ordered[0],
       endStation: ordered[n - 1],
     };
