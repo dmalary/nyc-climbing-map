@@ -2,12 +2,12 @@
   "meta": {
     "title": "NYC Climbing Gym Map",
     "description": "",
-    "lastVerified": "2026-07-16",
-    "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below.",
+    "lastVerified": "2026-07-21",
+    "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below. Split the former combined 'vital-wh-ues' entry into two real, separately-addressed gyms (vital-west-harlem, vital-upper-east-side). Added boulderingproject-gowanus (the rebranded original 2009 Brooklyn Boulders flagship site, now under the Bouldering Project brand) and brooklyn-uprising (new independent DUMBO gym, opened 2026). Both new companies added to lineSystems.company with unique MTA-family colors.",
     "colorSource": {
       "dataset": "MTA Colors \u2014 data.ny.gov",
       "url": "https://data.ny.gov/Transportation/MTA-Colors/3uhz-sej2/about_data",
-      "note": "Colors are real MTA/LIRR/Metro-North/Bridges&Tunnels brand hex values, not custom picks \u2014 pulled from the full available palette (31 distinct swatches) so every line across all three tiers (climbType, company, board) gets its own unique color, with no two entities sharing a hue."
+      "note": "Colors are real MTA/LIRR/Metro-North/Bridges&Tunnels brand hex values, not custom picks \u2014 pulled from the full available palette (31 distinct swatches) so every line across all three tiers (climbType, company, board) gets its own unique color, with no two entities sharing a hue. Single-station companies (brooklynboulders, metrorock, manhattanplaza, boulderingproject, brooklynuprising) never render a drawn line (a line needs 2+ member stations), so they double as safe holding spots for hues that are visually similar to an actively-drawn tier elsewhere \u2014 e.g. metrorock's green echoes lead's dark green, boulderingproject's gold echoes autobelay's yellow, but neither actually renders as a path, so there's no on-map clash."
     }
   },
   "lineSystems": {
@@ -23,7 +23,8 @@
               "system": "V-Scale",
               "example": "VB\u2013V14"
             }
-          ]
+          ],
+          "shortLabel": "B"
         },
         {
           "id": "toprope",
@@ -34,7 +35,8 @@
               "system": "YDS (5.x)",
               "example": "5.5\u20135.12"
             }
-          ]
+          ],
+          "shortLabel": "TR"
         },
         {
           "id": "lead",
@@ -45,7 +47,8 @@
               "system": "YDS (5.x)",
               "example": "5.8\u20135.13"
             }
-          ]
+          ],
+          "shortLabel": "L"
         },
         {
           "id": "autobelay",
@@ -56,7 +59,8 @@
               "system": "YDS (5.x)",
               "example": "5.5\u20135.11"
             }
-          ]
+          ],
+          "shortLabel": "AB"
         }
       ]
     },
@@ -66,37 +70,56 @@
         {
           "id": "movement",
           "name": "Movement (formerly The Cliffs)",
-          "color": "#9A38A1"
+          "color": "#9A38A1",
+          "shortLabel": "MV"
         },
         {
           "id": "vital",
           "name": "VITAL Climbing Gym",
-          "color": "#008EB7"
+          "color": "#008EB7",
+          "shortLabel": "VT"
         },
         {
           "id": "brooklynboulders",
           "name": "Brooklyn Boulders (BKB)",
-          "color": "#EB6800"
+          "color": "#EB6800",
+          "shortLabel": "BB"
         },
         {
           "id": "metrorock",
           "name": "MetroRock",
-          "color": "#8E5C33"
+          "color": "#00AF3F",
+          "shortLabel": "MR"
         },
         {
           "id": "gp81",
-          "name": "GP81 (independent)",
-          "color": "#A626AA"
+          "name": "GP81",
+          "color": "#0039A6",
+          "shortLabel": "G81"
         },
         {
           "id": "chelseapiers",
           "name": "Chelsea Piers Fitness",
-          "color": "#0078C6"
+          "color": "#0078C6",
+          "shortLabel": "CP"
         },
         {
           "id": "manhattanplaza",
           "name": "Manhattan Plaza Health Club",
-          "color": "#08179C"
+          "color": "#08179C",
+          "shortLabel": "MP"
+        },
+        {
+          "id": "boulderingproject",
+          "name": "Bouldering Project",
+          "color": "#CE8E00",
+          "shortLabel": "BP"
+        },
+        {
+          "id": "brooklynuprising",
+          "name": "Brooklyn Uprising",
+          "color": "#60269E",
+          "shortLabel": "BU"
         }
       ]
     },
@@ -106,22 +129,26 @@
         {
           "id": "moonboard",
           "name": "MoonBoard Line",
-          "color": "#6E267B"
+          "color": "#6E267B",
+          "shortLabel": "MB"
         },
         {
           "id": "kilterboard",
           "name": "Kilter Board Line",
-          "color": "#4D5357"
+          "color": "#4D5357",
+          "shortLabel": "KB"
         },
         {
           "id": "tensionboard",
           "name": "Tension Board Line",
-          "color": "#00AF3F"
+          "color": "#00A1DE",
+          "shortLabel": "TB"
         },
         {
           "id": "decoyboard",
           "name": "Decoy Board Line",
-          "color": "#CE8E00"
+          "color": "#923D97",
+          "shortLabel": "DB"
         }
       ]
     },
@@ -497,32 +524,32 @@
       ]
     },
     {
-      "id": "vital-wh-ues",
-      "name": "VITAL Climbing Gym \u2014 West Harlem / Upper East Side",
+      "id": "vital-west-harlem",
+      "name": "VITAL Climbing Gym \u2014 West Harlem",
       "formerly": "Steep Rock Bouldering",
       "company": "vital",
       "borough": "Manhattan",
       "neighborhood": "West Harlem",
-      "address": "509 W 129th St, New York, NY 10027",
-      "website": "https://www.vitalclimbinggym.com/wh-ues",
+      "address": "3225 Broadway, New York, NY 10027",
+      "website": "https://www.vitalclimbinggym.com/wh-ues-west-harlem",
       "coords": {
         "x": 300,
         "y": 170
       },
       "coordsGeo": {
-        "lat": 40.8168,
-        "lng": -73.9548
-      },
-      "labelOffset": {
-        "dx": 10,
-        "dy": 4
+        "lat": 40.8155,
+        "lng": -73.9568
       },
       "region": "nyc-metro",
       "connection": {
         "style": "solid",
         "connectsTo": null
       },
-      "sqft": 12000,
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "sqft": 8000,
       "types": [
         {
           "type": "bouldering",
@@ -543,12 +570,64 @@
         "eventName": null,
         "eventDate": null,
         "source": null,
-        "lastChecked": "2026-07-17"
+        "lastChecked": "2026-07-21"
       },
       "lines": [
         "bouldering",
         "vital",
         "tensionboard"
+      ]
+    },
+    {
+      "id": "vital-upper-east-side",
+      "name": "VITAL Climbing Gym \u2014 Upper East Side",
+      "formerly": "Steep Rock Bouldering",
+      "company": "vital",
+      "borough": "Manhattan",
+      "neighborhood": "East Harlem / Upper East Side",
+      "address": "1506 Lexington Ave, New York, NY 10029",
+      "website": "https://www.vitalclimbinggym.com/wh-ues-upper-east-side",
+      "coords": {
+        "x": 320,
+        "y": 175
+      },
+      "coordsGeo": {
+        "lat": 40.7885,
+        "lng": -73.952
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": -10
+      },
+      "sqft": 4000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale + color grading",
+            "range": [
+              "VB",
+              "V10"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-21"
+      },
+      "lines": [
+        "bouldering",
+        "vital"
       ]
     },
     {
@@ -988,6 +1067,112 @@
       "lines": [
         "toprope",
         "manhattanplaza"
+      ]
+    },
+    {
+      "id": "boulderingproject-gowanus",
+      "name": "Bouldering Project Brooklyn",
+      "formerly": "Brooklyn Boulders (BKB) \u2014 original 2009 flagship location",
+      "company": "boulderingproject",
+      "borough": "Brooklyn",
+      "neighborhood": "Gowanus",
+      "address": "575 Degraw St, Brooklyn, NY 11217",
+      "website": "https://www.boulderingproject.com/brooklyn",
+      "coords": {
+        "x": 350,
+        "y": 435
+      },
+      "coordsGeo": {
+        "lat": 40.6805,
+        "lng": -73.9862
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "sqft": 16000,
+      "notes": "Rebranded from Brooklyn Boulders to Bouldering Project in early 2026 after a major renovation. This is NYC's original indoor climbing gym site (opened 2009), though it's now under a different corporate brand than the current Brooklyn Boulders (which retains only the Queensbridge, LIC location).",
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V12"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-21"
+      },
+      "lines": [
+        "bouldering",
+        "boulderingproject"
+      ]
+    },
+    {
+      "id": "brooklyn-uprising",
+      "name": "Brooklyn Uprising",
+      "formerly": null,
+      "company": "brooklynuprising",
+      "borough": "Brooklyn",
+      "neighborhood": "DUMBO",
+      "address": "20 John St, Brooklyn, NY 11201",
+      "website": "https://www.bkup.nyc/",
+      "coords": {
+        "x": 335,
+        "y": 375
+      },
+      "coordsGeo": {
+        "lat": 40.7031,
+        "lng": -73.9903
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "sqft": null,
+      "notes": "New independent 'neoclassical' bouldering gym, opened 2026. Bouldering-focused with an emphasis on outdoor-movement training rather than competition-style setting. 16+ only. No named commercial training board confirmed as of this writing.",
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V11"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-21"
+      },
+      "lines": [
+        "bouldering",
+        "brooklynuprising"
       ]
     }
   ]
