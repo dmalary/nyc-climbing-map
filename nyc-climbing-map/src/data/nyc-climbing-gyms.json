@@ -1,0 +1,994 @@
+{
+  "meta": {
+    "title": "NYC Climbing Gym Map",
+    "description": "",
+    "lastVerified": "2026-07-16",
+    "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below.",
+    "colorSource": {
+      "dataset": "MTA Colors \u2014 data.ny.gov",
+      "url": "https://data.ny.gov/Transportation/MTA-Colors/3uhz-sej2/about_data",
+      "note": "Colors are real MTA/LIRR/Metro-North/Bridges&Tunnels brand hex values, not custom picks \u2014 pulled from the full available palette (31 distinct swatches) so every line across all three tiers (climbType, company, board) gets its own unique color, with no two entities sharing a hue."
+    }
+  },
+  "lineSystems": {
+    "climbType": {
+      "label": "Discipline",
+      "lines": [
+        {
+          "id": "bouldering",
+          "name": "Bouldering Line",
+          "color": "#D82233",
+          "grading": [
+            {
+              "system": "V-Scale",
+              "example": "VB\u2013V14"
+            }
+          ]
+        },
+        {
+          "id": "toprope",
+          "name": "Top Rope Line",
+          "color": "#0062CF",
+          "grading": [
+            {
+              "system": "YDS (5.x)",
+              "example": "5.5\u20135.12"
+            }
+          ]
+        },
+        {
+          "id": "lead",
+          "name": "Lead Line",
+          "color": "#009952",
+          "grading": [
+            {
+              "system": "YDS (5.x)",
+              "example": "5.8\u20135.13"
+            }
+          ]
+        },
+        {
+          "id": "autobelay",
+          "name": "Auto-Belay Line",
+          "color": "#F6BC26",
+          "grading": [
+            {
+              "system": "YDS (5.x)",
+              "example": "5.5\u20135.11"
+            }
+          ]
+        }
+      ]
+    },
+    "company": {
+      "label": "Company",
+      "lines": [
+        {
+          "id": "movement",
+          "name": "Movement (formerly The Cliffs)",
+          "color": "#9A38A1"
+        },
+        {
+          "id": "vital",
+          "name": "VITAL Climbing Gym",
+          "color": "#008EB7"
+        },
+        {
+          "id": "brooklynboulders",
+          "name": "Brooklyn Boulders (BKB)",
+          "color": "#EB6800"
+        },
+        {
+          "id": "metrorock",
+          "name": "MetroRock",
+          "color": "#8E5C33"
+        },
+        {
+          "id": "gp81",
+          "name": "GP81 (independent)",
+          "color": "#A626AA"
+        },
+        {
+          "id": "chelseapiers",
+          "name": "Chelsea Piers Fitness",
+          "color": "#0078C6"
+        },
+        {
+          "id": "manhattanplaza",
+          "name": "Manhattan Plaza Health Club",
+          "color": "#08179C"
+        }
+      ]
+    },
+    "board": {
+      "label": "Training Board",
+      "lines": [
+        {
+          "id": "moonboard",
+          "name": "MoonBoard Line",
+          "color": "#6E267B"
+        },
+        {
+          "id": "kilterboard",
+          "name": "Kilter Board Line",
+          "color": "#4D5357"
+        },
+        {
+          "id": "tensionboard",
+          "name": "Tension Board Line",
+          "color": "#00AF3F"
+        },
+        {
+          "id": "decoyboard",
+          "name": "Decoy Board Line",
+          "color": "#CE8E00"
+        }
+      ]
+    },
+    "region": {
+      "label": "Region",
+      "description": "Whether a gym sits within the core NYC-metro network (rendered as a normal solid line) or is an outlying gym reachable only by a dashed 'spur' connector, matching the real MTA map's treatment of NJ Transit/LIRR-style out-of-system links.",
+      "lines": [
+        {
+          "id": "nyc-metro",
+          "name": "NYC Metro (5 boroughs)",
+          "connectionStyle": "solid",
+          "color": "#000000"
+        },
+        {
+          "id": "long-island",
+          "name": "Long Island",
+          "connectionStyle": "dashed",
+          "color": "#000000"
+        },
+        {
+          "id": "new-jersey",
+          "name": "New Jersey",
+          "connectionStyle": "dashed",
+          "color": "#000000"
+        },
+        {
+          "id": "hudson-valley",
+          "name": "Hudson Valley / Upstate NY",
+          "connectionStyle": "dashed",
+          "color": "#000000"
+        }
+      ]
+    }
+  },
+  "gyms": [
+    {
+      "id": "movement-gowanus",
+      "name": "Movement Gowanus",
+      "formerly": "The Cliffs at Gowanus",
+      "company": "movement",
+      "borough": "Brooklyn",
+      "neighborhood": "Gowanus",
+      "address": "242 Butler St, Brooklyn, NY 11217",
+      "website": "https://movementgyms.com/gowanus/",
+      "coords": {
+        "x": 340,
+        "y": 430
+      },
+      "coordsGeo": {
+        "lat": 40.6837,
+        "lng": -73.9885
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 60000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V12"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.8",
+              "5.13"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "moonboard",
+        "kilterboard",
+        "tensionboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "lead",
+        "movement",
+        "moonboard",
+        "kilterboard",
+        "tensionboard"
+      ]
+    },
+    {
+      "id": "movement-lic",
+      "name": "Movement LIC",
+      "formerly": "The Cliffs at LIC",
+      "company": "movement",
+      "borough": "Queens",
+      "neighborhood": "Long Island City",
+      "address": "11-11 44th Dr, Long Island City, NY 11101",
+      "website": "https://movementgyms.com/lic/",
+      "coords": {
+        "x": 480,
+        "y": 300
+      },
+      "coordsGeo": {
+        "lat": 40.748,
+        "lng": -73.9503
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 23600,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V12"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.8",
+              "5.13"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "lead",
+        "movement"
+      ]
+    },
+    {
+      "id": "movement-harlem",
+      "name": "Movement Harlem",
+      "formerly": "The Cliffs at Harlem",
+      "company": "movement",
+      "borough": "Manhattan",
+      "neighborhood": "Harlem",
+      "address": "256 W 125th St, New York, NY 10027",
+      "website": "https://movementgyms.com/harlem/",
+      "coords": {
+        "x": 300,
+        "y": 140
+      },
+      "coordsGeo": {
+        "lat": 40.809,
+        "lng": -73.9482
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 16000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V13"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "moonboard",
+        "tensionboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "movement",
+        "moonboard",
+        "tensionboard"
+      ]
+    },
+    {
+      "id": "vital-williamsburg",
+      "name": "VITAL Climbing Gym \u2014 Williamsburg",
+      "formerly": "Steep Rock Bouldering (original flagship)",
+      "company": "vital",
+      "borough": "Brooklyn",
+      "neighborhood": "Williamsburg",
+      "address": "221 N 14th St, Brooklyn, NY 11249",
+      "website": "https://www.vitalclimbinggym.com/brooklyn",
+      "coords": {
+        "x": 355,
+        "y": 320
+      },
+      "coordsGeo": {
+        "lat": 40.7217,
+        "lng": -73.9563
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 45000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale + color grading",
+            "range": [
+              "VB",
+              "V13"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "moonboard",
+        "kilterboard",
+        "tensionboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "vital",
+        "moonboard",
+        "kilterboard",
+        "tensionboard"
+      ]
+    },
+    {
+      "id": "vital-les",
+      "name": "VITAL Climbing Gym \u2014 Lower East Side",
+      "formerly": null,
+      "company": "vital",
+      "borough": "Manhattan",
+      "neighborhood": "Lower East Side",
+      "address": "21 Essex St, New York, NY 10002",
+      "website": "https://www.vitalclimbinggym.com/lower-east-side",
+      "coords": {
+        "x": 330,
+        "y": 250
+      },
+      "coordsGeo": {
+        "lat": 40.7168,
+        "lng": -73.9895
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 20000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale + color grading",
+            "range": [
+              "VB",
+              "V12"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.11"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "moonboard",
+        "tensionboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "vital",
+        "moonboard",
+        "tensionboard"
+      ]
+    },
+    {
+      "id": "vital-wh-ues",
+      "name": "VITAL Climbing Gym \u2014 West Harlem / Upper East Side",
+      "formerly": "Steep Rock Bouldering",
+      "company": "vital",
+      "borough": "Manhattan",
+      "neighborhood": "West Harlem",
+      "address": "509 W 129th St, New York, NY 10027",
+      "website": "https://www.vitalclimbinggym.com/wh-ues",
+      "coords": {
+        "x": 300,
+        "y": 170
+      },
+      "coordsGeo": {
+        "lat": 40.8168,
+        "lng": -73.9548
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 12000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale + color grading",
+            "range": [
+              "VB",
+              "V11"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "tensionboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "vital",
+        "tensionboard"
+      ]
+    },
+    {
+      "id": "gp81-bushwick",
+      "name": "GP81",
+      "formerly": "GP-81 Greenpoint (original location, 81 Quay St)",
+      "company": "gp81",
+      "borough": "Brooklyn",
+      "neighborhood": "Bushwick",
+      "address": "379 Jefferson St, Brooklyn, NY 11237",
+      "website": "https://www.gp-81.com/",
+      "coords": {
+        "x": 390,
+        "y": 350
+      },
+      "coordsGeo": {
+        "lat": 40.7025,
+        "lng": -73.928
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 6500,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V14"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "moonboard",
+        "decoyboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "gp81",
+        "moonboard",
+        "decoyboard"
+      ]
+    },
+    {
+      "id": "gp81-ytc",
+      "name": "GP81 Youth Training Center (YTC)",
+      "formerly": null,
+      "company": "gp81",
+      "borough": "Brooklyn",
+      "neighborhood": "Bushwick",
+      "address": "218 Randolph St, Brooklyn, NY 11237",
+      "website": "https://www.gp-81ytc.com/",
+      "coords": {
+        "x": 395,
+        "y": 365
+      },
+      "coordsGeo": {
+        "lat": 40.7057,
+        "lng": -73.9333
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": null,
+      "notes": "Youth-focused sister facility to GP81's main Bushwick gym, a few blocks away. Primarily serves youth training/team programs, with public day-pass access on select days. Route setting is scaled for kid-sized bodies rather than a standard commercial board.",
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V10"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "gp81"
+      ]
+    },
+    {
+      "id": "metrorock-bushwick",
+      "name": "MetroRock Bushwick",
+      "formerly": null,
+      "company": "metrorock",
+      "borough": "Brooklyn",
+      "neighborhood": "Bushwick",
+      "address": "321 Starr St, Brooklyn, NY 11237",
+      "website": "https://bushwick.metrorock.com/",
+      "coords": {
+        "x": 400,
+        "y": 340
+      },
+      "coordsGeo": {
+        "lat": 40.7037,
+        "lng": -73.9236
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 23000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V11"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.11"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.8",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "autobelay",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.10"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "kilterboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "lead",
+        "autobelay",
+        "metrorock",
+        "kilterboard"
+      ]
+    },
+    {
+      "id": "bkb-queensbridge",
+      "name": "Brooklyn Boulders Queensbridge",
+      "formerly": null,
+      "company": "brooklynboulders",
+      "borough": "Queens",
+      "neighborhood": "Long Island City",
+      "address": "23-10 41st Ave, Long Island City, NY 11101",
+      "website": "https://qb.brooklynboulders.com/",
+      "coords": {
+        "x": 470,
+        "y": 280
+      },
+      "coordsGeo": {
+        "lat": 40.7526,
+        "lng": -73.943
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 25000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V10"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.7",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "autobelay",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.10"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "bouldering",
+        "lead",
+        "autobelay",
+        "brooklynboulders"
+      ]
+    },
+    {
+      "id": "chelsea-piers-manhattan",
+      "name": "Chelsea Piers Fitness \u2014 Manhattan",
+      "formerly": null,
+      "company": "chelseapiers",
+      "borough": "Manhattan",
+      "neighborhood": "Chelsea",
+      "address": "62 Chelsea Piers, New York, NY 10011",
+      "website": "https://fitness.chelseapiers.com/",
+      "coords": {
+        "x": 265,
+        "y": 320
+      },
+      "coordsGeo": {
+        "lat": 40.7466,
+        "lng": -74.0088
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 11000,
+      "types": [
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.11"
+            ]
+          }
+        },
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V6"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "toprope",
+        "bouldering",
+        "chelseapiers"
+      ]
+    },
+    {
+      "id": "chelsea-piers-brooklyn",
+      "name": "Chelsea Piers Fitness \u2014 Downtown Brooklyn",
+      "formerly": null,
+      "company": "chelseapiers",
+      "borough": "Brooklyn",
+      "neighborhood": "Boerum Hill",
+      "address": "1 Boerum Pl, Brooklyn, NY 11201",
+      "website": "https://fitness.chelseapiers.com/locations/downtown-brooklyn",
+      "coords": {
+        "x": 320,
+        "y": 400
+      },
+      "coordsGeo": {
+        "lat": 40.6924,
+        "lng": -73.9903
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 5000,
+      "types": [
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.10"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "toprope",
+        "chelseapiers"
+      ]
+    },
+    {
+      "id": "manhattan-plaza-hc",
+      "name": "Manhattan Plaza Health Club",
+      "formerly": null,
+      "company": "manhattanplaza",
+      "borough": "Manhattan",
+      "neighborhood": "Hell's Kitchen",
+      "address": "482 W 43rd St, New York, NY 10036",
+      "website": "https://www.manhattanplazahealthclub.com/",
+      "coords": {
+        "x": 230,
+        "y": 270
+      },
+      "coordsGeo": {
+        "lat": 40.7602,
+        "lng": -73.9968
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 3500,
+      "types": [
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.10"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-17"
+      },
+      "lines": [
+        "toprope",
+        "manhattanplaza"
+      ]
+    }
+  ]
+}
