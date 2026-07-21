@@ -24,6 +24,7 @@ export default function MapLiteral({
   hoveredId,
   onHoverStation,
   selectedLineId,
+  lineLookup
 }) {
   const svgRef = useRef(null);
   const [transform, setTransform] = useState(
@@ -251,6 +252,7 @@ export default function MapLiteral({
             width={width}
             height={height}
             scale={transform.k}
+            lineLookup={lineLookup}
           />
         )}
       </g>

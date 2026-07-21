@@ -37,6 +37,16 @@ export default function App() {
     [projection]
   );
 
+  const lineLookup = useMemo(() => {
+    const map = {};
+    Object.values(gymData.lineSystems).forEach((tier) => {
+      (tier.lines ?? []).forEach((line) => {
+        map[line.id] = { color: line.color, shortLabel: line.shortLabel, name: line.name };
+      });
+    });
+    return map;
+  }, []);
+
   const hoveredGym = stations.find((s) => s.id === hoveredId) ?? null;
 
   const linePaths = useMemo(
@@ -66,6 +76,7 @@ export default function App() {
             onHoverStation={setHoveredId}
             linePaths={linePaths}
             selectedLineId={selectedLineId}
+            lineLookup={lineLookup}
           />
         </div>
 
