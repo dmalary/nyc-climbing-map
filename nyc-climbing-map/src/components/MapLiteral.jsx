@@ -18,6 +18,7 @@ export default function MapLiteral({
   width,
   height,
   boroughFeatures,
+  parkFeatures,
   pathGenerator,
   stations,
   linePaths,
@@ -78,7 +79,7 @@ export default function MapLiteral({
       preserveAspectRatio="xMidYMid meet"
       className="w-full h-full touch-none"
     >
-      <rect x={0} y={0} width={width} height={height} fill="#f5f0e8" />
+      <rect x={-100} y={0} width={width * 2} height={height} fill="#a8c9d4" />
 
       <g transform={transform.toString()}>
         <g className="boroughs">
@@ -92,6 +93,18 @@ export default function MapLiteral({
             />
           ))}
         </g>
+
+        {/* <g className="parks">
+          {parkFeatures.map((feature, i) => (
+            <path key={i} d={pathGenerator(feature)} fill="#c3d6a8" fillRule="evenodd" stroke="none" />
+          ))}
+        </g> */}
+
+        {/* <g className="parks">
+          {parkFeatures.map((feature, i) => (
+            <path key={i} d={pathGenerator(feature)} fill="none" stroke="#c3d6a8" strokeWidth={2 / transform.k} />
+          ))}
+        </g> */}
 
         <g className="lines">
           {linePaths.map((line) => {

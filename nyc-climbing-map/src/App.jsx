@@ -8,6 +8,7 @@ import { buildLinePaths } from "./utilities/buildLiteralPaths.js";
 
 import gymData from "./data/nyc-climbing-gyms.json";
 import nycBoroughs from "./data/Borough_Boundaries_20260720.json"; 
+import parksData from "./data/Parks_Properties_20260721.json"; 
 
 const WIDTH = 800;
 const HEIGHT = 900;
@@ -46,13 +47,18 @@ export default function App() {
     });
     return map;
   }, []);
-
-  const hoveredGym = stations.find((s) => s.id === hoveredId) ?? null;
-
+  
   const linePaths = useMemo(
     () => buildLinePaths(stations, gymData.lineSystems),
     [stations]
   );
+
+  const flagshipParks = useMemo(
+    () => parksData.features.filter((f) => f.properties.typecategory === "Flagship Park"),
+    []
+  );
+  
+  const hoveredGym = stations.find((s) => s.id === hoveredId) ?? null;
 
   return (
     <div className="w-full h-screen flex flex-col bg-black">
@@ -70,6 +76,7 @@ export default function App() {
             width={WIDTH}
             height={HEIGHT}
             boroughFeatures={nycBoroughs.features}
+            parkFeatures={flagshipParks}
             pathGenerator={pathGenerator}
             stations={stations}
             hoveredId={hoveredId}
