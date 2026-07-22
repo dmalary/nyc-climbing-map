@@ -9,7 +9,7 @@ const TICK_RADIUS = 3;
 const LABEL_INTERVAL = 60;     // labeled bullets, sparser than plain ticks
 const LABEL_RADIUS = 9;
 const TERMINUS_RADIUS = 10;
-const INITIAL_ZOOM_SCALE = 1.4;
+const INITIAL_ZOOM_SCALE = 1.7;
 const DIMMED_OPACITY = 0.12;
 const SELECTED_OPACITY = 1;
 const DEFAULT_OPACITY = 0.85;
@@ -30,9 +30,9 @@ export default function MapLiteral({
   const svgRef = useRef(null);
   const [transform, setTransform] = useState(
     d3.zoomIdentity
-      .translate(width / 2, height / 2)
+      .translate(width / 3, height / 2.5)
       .scale(INITIAL_ZOOM_SCALE)
-      .translate(-width / 2, -height / 2)
+      .translate(-width / 3, -height / 2.5)
   );
 
   useEffect(() => {
@@ -46,9 +46,9 @@ export default function MapLiteral({
     svg.call(zoomBehavior);
 
     const initialTransform = d3.zoomIdentity
-      .translate(width / 2, height / 2)
+      .translate(width / 3, height / 2.5)
       .scale(INITIAL_ZOOM_SCALE)
-      .translate(-width / 2, -height / 2);
+      .translate(-width / 3, -height / 2.5);
 
     svg.call(zoomBehavior.transform, initialTransform);
 
