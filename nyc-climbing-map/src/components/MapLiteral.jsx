@@ -13,6 +13,7 @@ const INITIAL_ZOOM_SCALE = 1.7;
 const DIMMED_OPACITY = 0.12;
 const SELECTED_OPACITY = 1;
 const DEFAULT_OPACITY = 0.85;
+const BULLET_OFFSET = 14; 
 
 export default function MapLiteral({
   width,
@@ -72,6 +73,15 @@ export default function MapLiteral({
     return station.lines.includes(selectedLineId) ? 1 : 0.25;
   };
 
+  function offsetFromPath(atPoint, prevPoint, nextPoint, distance) {
+    const dx = nextPoint.x - prevPoint.x;
+    const dy = nextPoint.y - prevPoint.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    return { x: atPoint.x + nx * distance, y: atPoint.y + ny * distance };
+  }
+
   return (
     <svg
       ref={svgRef}
@@ -126,51 +136,49 @@ export default function MapLiteral({
                   strokeLinejoin="round"
                 />
 
-                {/* small unlabeled ticks */}
-                {line.points
-                  .filter((_, i) => i % TICK_INTERVAL === 0 && i % LABEL_INTERVAL !== 0)
-                  .map((pt, i) => (
-                    <circle
-                      key={`tick-${i}`}
-                      cx={pt.x}
-                      cy={pt.y}
-                      r={TICK_RADIUS / transform.k}
-                      fill={line.color}
-                    />
-                  ))}
+                  {/* small unlabeled ticks stay on the path, unchanged */}
+                  {line.points
+                    .filter((_, i) => i % TICK_INTERVAL === 0 && i % LABEL_INTERVAL !== 0)
+                    .map((pt, i) => (
+                      <circle key={`tick-${i}`} cx={pt.x} cy={pt.y} r={TICK_RADIUS / transform.k} fill={line.color} />
+                    ))}
 
-                {/* labeled bullets at set intervals */}
-                {line.points
-                  .filter((_, i) => i % LABEL_INTERVAL === 0)
-                  .map((pt, i) => (
-                    <LineBullet
-                      key={`label-${i}`}
-                      x={pt.x}
-                      y={pt.y}
-                      color={line.color}
-                      label={line.shortLabel}
-                      radius={LABEL_RADIUS}
-                      scale={transform.k}
-                    />
-                  ))}
+                  {/* labeled bullets — offset off the path, no stem */}
+                  {line.points
+                    .map((pt, i) => ({ pt, i }))
+                    .filter(({ i }) => i % LABEL_INTERVAL === 0 && i !== 0 && i !== line.points.length - 1)
+                    .map(({ pt, i }) => {
+                      const prev = line.points[Math.max(0, i - 1)];
+                      const next = line.points[Math.min(line.points.length - 1, i + 1)];
+                      const offsetPt = offsetFromPath(pt, prev, next, BULLET_OFFSET / transform.k);
 
-                {/* terminus bullets, start + end */}
-                <LineBullet
-                  x={line.points[0].x}
-                  y={line.points[0].y}
-                  color={line.color}
-                  label={line.shortLabel}
-                  radius={TERMINUS_RADIUS}
-                  scale={transform.k}
-                />
-                <LineBullet
-                  x={line.points[line.points.length - 1].x}
-                  y={line.points[line.points.length - 1].y}
-                  color={line.color}
-                  label={line.shortLabel}
-                  radius={TERMINUS_RADIUS}
-                  scale={transform.k}
-                />
+                      return (
+                        <LineBullet
+                          key={`label-${i}`}
+                          x={offsetPt.x} y={offsetPt.y}
+                          color={line.color} label={line.shortLabel}
+                          radius={LABEL_RADIUS} scale={transform.k}
+                        />
+                      );
+                    })}
+
+                  {/* terminus bullets — same offset treatment */}
+                  {(() => {
+                    const startPt = line.points[0];
+                    const startNext = line.points[1];
+                    const startOffset = offsetFromPath(startPt, startPt, startNext, BULLET_OFFSET / transform.k);
+
+                    const endPt = line.points[line.points.length - 1];
+                    const endPrev = line.points[line.points.length - 2];
+                    const endOffset = offsetFromPath(endPt, endPrev, endPt, BULLET_OFFSET / transform.k);
+
+                    return (
+                      <>
+                        <LineBullet x={startOffset.x} y={startOffset.y} color={line.color} label={line.shortLabel} radius={TERMINUS_RADIUS} scale={transform.k} />
+                        <LineBullet x={endOffset.x} y={endOffset.y} color={line.color} label={line.shortLabel} radius={TERMINUS_RADIUS} scale={transform.k} />
+                      </>
+                    );
+                  })()}
               </g>
             );
           })}
