@@ -3,17 +3,19 @@ import * as d3 from "d3";
 import { Delaunay } from "d3";
 import Tooltip from "./Tooltip";
 
-const LINE_STROKE_WIDTH = 6;
-const TICK_INTERVAL = 24;      // small unlabeled dots
-const TICK_RADIUS = 3;
-const LABEL_INTERVAL = 60;     // labeled bullets, sparser than plain ticks
-const LABEL_RADIUS = 9;
-const TERMINUS_RADIUS = 10;
-const INITIAL_ZOOM_SCALE = 1.7;
-const DIMMED_OPACITY = 0.12;
-const SELECTED_OPACITY = 1;
-const DEFAULT_OPACITY = 0.85;
-const BULLET_OFFSET = 14; 
+import {
+  LINE_STROKE_WIDTH,
+  TICK_INTERVAL,      // small unlabeled dots
+  TICK_RADIUS,
+  LABEL_INTERVAL,     // labeled bullets, sparser than plain ticks
+  LABEL_RADIUS,
+  TERMINUS_RADIUS,
+  INITIAL_ZOOM_SCALE,
+  DIMMED_OPACITY,
+  SELECTED_OPACITY,
+  DEFAULT_OPACITY,
+  BULLET_OFFSET
+} from "../constants.js";
 
 export default function MapLiteral({
   width,
@@ -26,7 +28,8 @@ export default function MapLiteral({
   hoveredId,
   onHoverStation,
   selectedLineId,
-  lineLookup
+  lineLookup,
+  stationLabelPlacement
 }) {
   const svgRef = useRef(null);
   const [transform, setTransform] = useState(
@@ -188,7 +191,9 @@ export default function MapLiteral({
           {stations.map((station) => {
             const lineCount = station.lines.length;
             const isHovered = station.id === hoveredId;
-            const { dx, dy } = station.labelOffset ?? { dx: 10, dy: 4 };
+            const computed = stationLabelPlacement?.[station.id];
+            const { dx, dy } = computed ?? station.labelOffset ?? { dx: 10, dy: 4 };
+            const textAnchor = dx < 0 ? "end" : "start";
             const opacity = stationOpacity(station);
             const pillScale = 1 / Math.sqrt(transform.k);
 
@@ -242,6 +247,7 @@ export default function MapLiteral({
                 <text
                   x={dx}
                   y={dy}
+                  textAnchor={textAnchor}
                   fontSize={11 / transform.k}
                   fontFamily='"Helvetica Neue", Helvetica, Arial, sans-serif'
                   fill="#111"

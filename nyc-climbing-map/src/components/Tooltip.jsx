@@ -1,4 +1,4 @@
-const TIER_ORDER = { company: 0, climbType: 1, board: 2 };
+import { TIER_ORDER } from "../constants.js";
 
 export default function Tooltip({ station, width, height, scale, lineLookup }) {
   const BUBBLE_W = 200 / scale;
@@ -41,7 +41,7 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
 
     return { lineId, line, x: cursorX };
   });
-console.log(lineLookup);
+
   return (
     <g style={{ pointerEvents: "none" }}>
       <rect x={bubbleX} y={bubbleY} width={BUBBLE_W} height={BUBBLE_H} rx={6 * fontScale}

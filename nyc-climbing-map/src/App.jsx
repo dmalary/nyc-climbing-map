@@ -5,13 +5,14 @@ import MapLiteral from "./components/MapLiteral.jsx";
 import Legend from "./components/Legend.jsx";
 
 import { buildLinePaths } from "./utilities/buildLiteralPaths.js";
+import { placeLabels, lineObstacleRects } from "./utilities/labelPlacement.js";
+
+import { WIDTH, HEIGHT, LINE_STROKE_WIDTH } from "./constants.js";
 
 import gymData from "./data/nyc-climbing-gyms.json";
 import nycBoroughs from "./data/Borough_Boundaries_20260720.json"; 
 import parksData from "./data/Parks_Properties_20260721.json"; 
 
-const WIDTH = 800;
-const HEIGHT = 900;
 
 export default function App() {
   const [hoveredId, setHoveredId] = useState(null);
@@ -57,6 +58,18 @@ const lineLookup = useMemo(() => {
     () => parksData.features.filter((f) => f.properties.typecategory === "Flagship Park"),
     []
   );
+
+  const stationLabelPlacement = useMemo(() => {
+    const lineRects = lineObstacleRects(linePaths, LINE_STROKE_WIDTH);
+
+    const items = stations.map((s) => ({ id: s.id, x: s.x, y: s.y }));
+    const { offsets } = placeLabels(
+      items,
+      { labelWidth: 90, labelHeight: 14, distance: 12 },
+      lineRects // <-- seeded obstacles, so labels avoid lines from the start
+    );
+    return offsets;
+  }, [stations, linePaths]);
   
   const hoveredGym = stations.find((s) => s.id === hoveredId) ?? null;
 
@@ -84,6 +97,7 @@ const lineLookup = useMemo(() => {
             linePaths={linePaths}
             selectedLineId={selectedLineId}
             lineLookup={lineLookup}
+            stationLabelPlacement={stationLabelPlacement}
           />
         </div>
 
