@@ -38,15 +38,15 @@ export default function App() {
     [projection]
   );
 
-  const lineLookup = useMemo(() => {
-    const map = {};
-    Object.values(gymData.lineSystems).forEach((tier) => {
-      (tier.lines ?? []).forEach((line) => {
-        map[line.id] = { color: line.color, shortLabel: line.shortLabel, name: line.name };
-      });
+const lineLookup = useMemo(() => {
+  const map = {};
+  Object.entries(gymData.lineSystems).forEach(([tierId, tier]) => {
+    (tier.lines ?? []).forEach((line) => {
+      map[line.id] = { color: line.color, shortLabel: line.shortLabel, name: line.name, tierId };
     });
-    return map;
-  }, []);
+  });
+  return map;
+}, []);
   
   const linePaths = useMemo(
     () => buildLinePaths(stations, gymData.lineSystems),

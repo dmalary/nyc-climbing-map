@@ -1,10 +1,15 @@
+const TIER_ORDER = { company: 0, climbType: 1, board: 2 };
+
 export default function Tooltip({ station, width, height, scale, lineLookup }) {
   const BUBBLE_W = 200 / scale;
-  const BUBBLE_H = 80 / scale; // taller to fit the line-bullet row
+  const BUBBLE_H = 80 / scale;
   const GAP = 18 / scale;
   const TAIL = 9 / scale;
   const fontScale = 1 / scale;
   const ICON_R = 8 * fontScale;
+  const FONT_SIZE = 9 * fontScale;
+  const CHAR_GAP = FONT_SIZE * 0.6;
+  const GROUP_GAP = CHAR_GAP * 2;
 
   const placeAbove = station.y - GAP - BUBBLE_H > 0;
   const bubbleY = placeAbove ? station.y - GAP - BUBBLE_H : station.y + GAP;
@@ -16,6 +21,27 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
 
   const iconSpacing = ICON_R * 2 + 8 * fontScale;
 
+  // Order: company, then climbType, then board
+  const orderedLines = [...station.lines]
+    .filter((id) => lineLookup?.[id])
+    .sort((a, b) => TIER_ORDER[lineLookup[a].tierId] - TIER_ORDER[lineLookup[b].tierId]);
+
+  // Cumulative positions, with an extra gap inserted at each tier boundary
+  let cursorX = 0;
+  const positioned = orderedLines.map((lineId, i) => {
+    const line = lineLookup[lineId];
+    const prevLine = i > 0 ? lineLookup[orderedLines[i - 1]] : null;
+
+    if (i > 0) {
+      cursorX += iconSpacing;
+      if (prevLine.tierId !== line.tierId) {
+        cursorX += GROUP_GAP;
+      }
+    }
+
+    return { lineId, line, x: cursorX };
+  });
+console.log(lineLookup);
   return (
     <g style={{ pointerEvents: "none" }}>
       <rect x={bubbleX} y={bubbleY} width={BUBBLE_W} height={BUBBLE_H} rx={6 * fontScale}
@@ -24,34 +50,26 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
       <rect x={tailX - TAIL} y={placeAbove ? bubbleY + BUBBLE_H - 1 * fontScale : bubbleY}
         width={TAIL * 2} height={2 * fontScale} fill="white" />
 
-      {/* Line bullets — one circle + short label per line running through this station */}
       <g transform={`translate(${bubbleX + 12 * fontScale + ICON_R}, ${bubbleY + 18 * fontScale})`}>
-        {station.lines.map((lineId, i) => {
-          const line = lineLookup?.[lineId];
-          if (!line) return null;
-          return (
-            <g key={lineId} transform={`translate(${i * iconSpacing}, 0)`}>
-              <circle r={ICON_R} fill={line.color} stroke="white" strokeWidth={1 * fontScale} />
-              <text
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={9 * fontScale}
-                fontWeight="700"
-                fill="white"
-              >
-                {line.shortLabel}
-              </text>
-            </g>
-          );
-        })}
+        {positioned.map(({ lineId, line, x }) => (
+          <g key={lineId} transform={`translate(${x}, 0)`}>
+            <circle r={ICON_R} fill={line.color} stroke="white" strokeWidth={1 * fontScale} />
+            <text
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize={FONT_SIZE}
+              fontWeight="700"
+              fill="white"
+            >
+              {line.shortLabel}
+            </text>
+          </g>
+        ))}
       </g>
 
       <text x={bubbleX + 12 * fontScale} y={bubbleY + 55 * fontScale} fontSize={11 * fontScale} fill="#666">
         {station.neighborhood}, {station.borough}
       </text>
-      {/* <text x={bubbleX + 12 * fontScale} y={bubbleY + 73 * fontScale} fontSize={11 * fontScale} fill="#666">
-        {station.types.map((t) => t.type).join(" · ")}
-      </text> */}
     </g>
   );
 }
