@@ -95,7 +95,7 @@
           "id": "gp81",
           "name": "GP81",
           "color": "#008eb7",
-          "shortLabel": "G81"
+          "shortLabel": "GP"
         },
         {
           "id": "chelseapiers",
@@ -670,8 +670,8 @@
         }
       ],
       "boards": [
-        "moonboard",
-        "decoyboard"
+        "decoyboard",
+        "tensionboard"
       ],
       "comps": {
         "active": false,
@@ -683,8 +683,8 @@
       "lines": [
         "bouldering",
         "gp81",
-        "moonboard",
-        "decoyboard"
+        "decoyboard",
+        "tensionboard"
       ]
     },
     {
@@ -727,7 +727,9 @@
           }
         }
       ],
-      "boards": [],
+      "boards": [
+        "moonboard"
+      ],
       "comps": {
         "active": false,
         "eventName": null,
@@ -737,7 +739,8 @@
       },
       "lines": [
         "bouldering",
-        "gp81"
+        "gp81",
+        "moonboard"
       ]
     },
     {
@@ -887,7 +890,7 @@
           }
         }
       ],
-      "boards": [],
+      "boards": ["kilterboard"],
       "comps": {
         "active": false,
         "eventName": null,
@@ -899,7 +902,8 @@
         "bouldering",
         "lead",
         "autobelay",
-        "brooklynboulders"
+        "brooklynboulders",
+        "kilterboard"
       ]
     },
     {
