@@ -76,7 +76,7 @@
         {
           "id": "vital",
           "name": "VITAL Climbing Gym",
-          "color": "#008EB7",
+          "color": "#00AF3F",
           "shortLabel": "VT"
         },
         {
@@ -88,13 +88,13 @@
         {
           "id": "metrorock",
           "name": "MetroRock",
-          "color": "#00AF3F",
+          "color": "#0039A6",
           "shortLabel": "MR"
         },
         {
           "id": "gp81",
           "name": "GP81",
-          "color": "#0039A6",
+          "color": "#008eb7",
           "shortLabel": "G81"
         },
         {
