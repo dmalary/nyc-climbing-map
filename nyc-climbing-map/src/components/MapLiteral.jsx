@@ -182,35 +182,34 @@ export default function MapLiteral({
             const isHovered = station.id === hoveredId;
             const { dx, dy } = station.labelOffset ?? { dx: 10, dy: 4 };
             const opacity = stationOpacity(station);
+            const pillScale = 1 / Math.sqrt(transform.k);
 
             let bullet;
             if (lineCount >= 4) {
-              const pillWidth = 28;
-              const pillHeight = 12;
               bullet = (
                 <rect
-                  x={-pillWidth / 2}
-                  y={-pillHeight / 2}
-                  width={pillWidth}
-                  height={pillHeight}
-                  rx={pillHeight / 2}
+                  x={-14 * pillScale} 
+                  y={-6 * pillScale}
+                  width={28 * pillScale} 
+                  height={12 * pillScale}
+                  rx={6 * pillScale}
                   fill="white"
                   stroke="black"
-                  strokeWidth={isHovered ? 2.5 : 1.8}
+                  strokeWidth={(isHovered ? 2.5 : 1.8) * pillScale}
                   style={{ transition: "stroke-width 150ms ease" }}
                 />
               );
             } else if (lineCount >= 2) {
               bullet = (
                 <rect
-                  x={-4}
-                  y={-4}
-                  width={8}
-                  height={8}
-                  rx={4}
+                  x={-4 * pillScale}
+                  y={-4 * pillScale}
+                  width={8 * pillScale}
+                  height={8 * pillScale}
+                  rx={4 * pillScale}
                   fill="white"
                   stroke="black"
-                  strokeWidth={isHovered ? 2 : 1.2}
+                  strokeWidth={isHovered ? 2 : 1.2 * pillScale}
                   style={{ transition: "stroke-width 150ms ease" }}
                 />
               );
