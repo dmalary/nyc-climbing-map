@@ -70,7 +70,7 @@
         {
           "id": "movement",
           "name": "Movement (formerly The Cliffs)",
-          "color": "#9A38A1",
+          "color": "#EB6800",
           "shortLabel": "MV"
         },
         {
@@ -82,7 +82,7 @@
         {
           "id": "brooklynboulders",
           "name": "Brooklyn Boulders (BKB)",
-          "color": "#EB6800",
+          "color": "#FF6319",
           "shortLabel": "BB"
         },
         {
@@ -100,13 +100,13 @@
         {
           "id": "chelseapiers",
           "name": "Chelsea Piers Fitness",
-          "color": "#0078C6",
+          "color": "#8E5C33",
           "shortLabel": "CP"
         },
         {
           "id": "manhattanplaza",
           "name": "Manhattan Plaza Health Club",
-          "color": "#08179C",
+          "color": "#9A38A1",
           "shortLabel": "MP"
         },
         {
