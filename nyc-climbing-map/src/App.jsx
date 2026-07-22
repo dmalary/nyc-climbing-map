@@ -77,7 +77,7 @@ const lineLookup = useMemo(() => {
     <div className="w-full h-screen flex flex-col bg-black">
       {/* Vignelli-poster title bar */}
       <header className="h-16 flex items-center px-6 bg-black shrink-0">
-        <h1 className="text-white text-lg md:text-xl font-bold uppercase tracking-wide">
+        <h1 className="text-white text-lg md:text-3xl font-medium tracking-wide">
           {gymData.meta.title}
         </h1>
       </header>

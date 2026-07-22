@@ -29,7 +29,8 @@ export default function MapLiteral({
   onHoverStation,
   selectedLineId,
   lineLookup,
-  stationLabelPlacement
+  stationLabelPlacement,
+  lineBulletPlacement
 }) {
   const svgRef = useRef(null);
   const [transform, setTransform] = useState(
