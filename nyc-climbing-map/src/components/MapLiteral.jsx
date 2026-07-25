@@ -93,7 +93,6 @@ export default function MapLiteral({
       preserveAspectRatio="xMidYMid meet"
       className="w-full h-full touch-none"
     >
-      <rect x={-100} y={0} width={width * 2} height={height} fill="#a8c9d4" />
 
       <g transform={transform.toString()}>
         <g className="boroughs">

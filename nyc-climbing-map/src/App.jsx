@@ -3,6 +3,7 @@ import * as d3 from "d3";
 
 import MapLiteral from "./components/MapLiteral.jsx";
 import Legend from "./components/Legend.jsx";
+import Footer from "./components/Footer.jsx";
 
 import { buildLinePaths } from "./utilities/buildLiteralPaths.js";
 import { placeLabels, lineObstacleRects } from "./utilities/labelPlacement.js";
@@ -87,7 +88,7 @@ export default function App() {
       </header>
 
       <div className="flex flex-1 min-h-0">
-        <div className="flex-1 flex items-center justify-center bg-[#f5f0e8] overflow-auto">
+        <div className="flex-1 flex items-center justify-center bg-[#a8c9d4] overflow-auto">
           <MapLiteral
             width={WIDTH}
             height={HEIGHT}
@@ -111,6 +112,7 @@ export default function App() {
           onSelectLine={setSelectedLineId}
         />
       </div>
+      <Footer />
     </div>
   );
 }
