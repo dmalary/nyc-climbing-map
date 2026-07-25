@@ -2,7 +2,7 @@ import { TIER_ORDER } from "../constants.js";
 
 export default function Tooltip({ station, width, height, scale, lineLookup }) {
   const BUBBLE_W = 200 / scale;
-  const BUBBLE_H = 80 / scale;
+  const BUBBLE_H = 85 / scale;
   const GAP = 18 / scale;
   const TAIL = 9 / scale;
   const fontScale = 1 / scale;
@@ -68,7 +68,11 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
       </g>
 
       <text x={bubbleX + 12 * fontScale} y={bubbleY + 55 * fontScale} fontSize={11 * fontScale} fill="#666">
-        {station.neighborhood}, {station.borough}
+        {station.name}
+      </text>
+
+      <text x={bubbleX + 12 * fontScale} y={bubbleY + 70 * fontScale} fontSize={11 * fontScale} fill="#666">
+        {station.neighborhood}
       </text>
     </g>
   );
