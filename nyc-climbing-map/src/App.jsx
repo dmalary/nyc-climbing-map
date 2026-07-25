@@ -81,7 +81,7 @@ export default function App() {
   return (
     <div className="w-full h-screen flex flex-col bg-black">
       <header className="h-16 flex items-center px-6 bg-black shrink-0">
-        <h1 className="text-white text-lg md:text-3xl font-medium tracking-wide">
+        <h1 className="text-white text-2xl md:text-4xl font-medium tracking-wide">
           {gymData.meta.title}
         </h1>
       </header>

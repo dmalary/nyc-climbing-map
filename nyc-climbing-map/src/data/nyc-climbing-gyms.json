@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "New York City Climbing",
-    "description": "",
+    "description": "A map of NYC's gyms that thinks like a transit map. Instead of train lines, each colored line traces a shared discipline, company, or training board — click through to highlight each type.",
     "lastVerified": "2026-07-21",
     "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below. Split the former combined 'vital-wh-ues' entry into two real, separately-addressed gyms (vital-west-harlem, vital-upper-east-side). Added boulderingproject-gowanus (the rebranded original 2009 Brooklyn Boulders flagship site, now under the Bouldering Project brand) and brooklyn-uprising (new independent DUMBO gym, opened 2026). Both new companies added to lineSystems.company with unique MTA-family colors.",
     "colorSource": {
@@ -62,7 +62,8 @@
           ],
           "shortLabel": "AB"
         }
-      ]
+      ],
+      "subtitle": "what you can climb"
     },
     "company": {
       "label": "Company",
@@ -121,7 +122,8 @@
           "color": "#60269E",
           "shortLabel": "BU"
         }
-      ]
+      ],
+       "subtitle": "who runs it"
     },
     "board": {
       "label": "Training Board",
@@ -150,7 +152,8 @@
           "color": "#923D97",
           "shortLabel": "DB"
         }
-      ]
+      ],
+      "subtitle": "what's on the wall"
     },
     "region": {
       "label": "Region",
