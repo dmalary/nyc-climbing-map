@@ -5,7 +5,8 @@ export default function Legend({ lineSystems, description, selectedLineId, onSel
         <p className="text-sm text-gray-700 leading-relaxed">{description}</p>
 
         {Object.entries(lineSystems).map(([tierId, tier]) => (
-          <div key={tierId}>
+          tier.label !== "Region" && (
+            <div key={tierId}>
             <h2 className="text-xs font-bold uppercase tracking-wide mb-2 text-gray-500">
               {tier.label}
             </h2>
@@ -31,6 +32,8 @@ export default function Legend({ lineSystems, description, selectedLineId, onSel
               })}
             </ul>
           </div>
+          )
+            
         ))}
       </div>
     </aside>
