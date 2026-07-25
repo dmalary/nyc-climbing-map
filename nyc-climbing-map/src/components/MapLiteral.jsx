@@ -223,7 +223,7 @@ export default function MapLiteral({
                   rx={4 * pillScale}
                   fill="white"
                   stroke="black"
-                  strokeWidth={isHovered ? 2 : 1.2 * pillScale}
+                  strokeWidth={(isHovered ? 2 : 1.2) * pillScale}
                   style={{ transition: "stroke-width 150ms ease" }}
                 />
               );
