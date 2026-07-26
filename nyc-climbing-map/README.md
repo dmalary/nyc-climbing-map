@@ -1,16 +1,23 @@
-# React + Vite
+# NYC Climbing Map
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+bugs:
+- hover states -> delaunay? to set outer limit for hover - fix!
+- map green and main avenues? - can i even do that? * fix!
 
-Currently, two official plugins are available:
+nice to have:
+- better bullet placement?
+- paths should not all start at center, spread out on pill (or circle) + path route cleanup?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+refs
+map
+- https://stewartmader.com/wp-content/uploads/Subway-NY-NJ-scaled.jpg
+- https://cdn.abcotvs.com/dip/images/16119489_040225-wabc-old-and-new-subway-maps-img.jpg
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+design
+- https://www.ceros.com/blog/nyc-subway-logo/
+- https://www.conceptdraw.com/examples/metro-train-diagram
+- https://www.nytransitmuseum.org/vignelli/
+- https://warofyesterday.blogspot.com/2010/06/making-subway-map-vi.html
+- https://www.vanshnookenraggen.com/_index/2017/05/a-complete-and-geographically-accurate-nyc-subway-track-map/
