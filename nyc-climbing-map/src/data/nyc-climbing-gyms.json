@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "New York City Climbing",
-    "description": "A map of NYC's gyms that thinks like a transit map. Instead of train lines, each colored line traces a shared discipline, company, or training board — click through to highlight each type.",
+    "title": "NYC Climbing Gym Map",
+    "description": "A map of NYC's gyms that thinks like a transit map. Instead of train lines, each colored line traces a shared discipline, company, or training board \u2014 click through to highlight each type.",
     "lastVerified": "2026-07-21",
     "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below. Split the former combined 'vital-wh-ues' entry into two real, separately-addressed gyms (vital-west-harlem, vital-upper-east-side). Added boulderingproject-gowanus (the rebranded original 2009 Brooklyn Boulders flagship site, now under the Bouldering Project brand) and brooklyn-uprising (new independent DUMBO gym, opened 2026). Both new companies added to lineSystems.company with unique MTA-family colors.",
     "colorSource": {
@@ -77,7 +77,7 @@
         {
           "id": "vital",
           "name": "VITAL Climbing Gym",
-          "color": "#00AF3F",
+          "color": "#008EB7",
           "shortLabel": "VT"
         },
         {
@@ -89,14 +89,14 @@
         {
           "id": "metrorock",
           "name": "MetroRock",
-          "color": "#0039A6",
+          "color": "#00AF3F",
           "shortLabel": "MR"
         },
         {
           "id": "gp81",
           "name": "GP81",
-          "color": "#008eb7",
-          "shortLabel": "GP"
+          "color": "#0039A6",
+          "shortLabel": "G81"
         },
         {
           "id": "chelseapiers",
@@ -121,9 +121,15 @@
           "name": "Brooklyn Uprising",
           "color": "#60269E",
           "shortLabel": "BU"
+        },
+        {
+          "id": "centralrockgym",
+          "name": "Central Rock Gym",
+          "color": "#799534",
+          "shortLabel": "CRG"
         }
       ],
-       "subtitle": "who runs it"
+      "subtitle": "who runs it"
     },
     "board": {
       "label": "Training Board",
@@ -673,8 +679,8 @@
         }
       ],
       "boards": [
-        "decoyboard",
-        "tensionboard"
+        "moonboard",
+        "decoyboard"
       ],
       "comps": {
         "active": false,
@@ -686,8 +692,8 @@
       "lines": [
         "bouldering",
         "gp81",
-        "decoyboard",
-        "tensionboard"
+        "moonboard",
+        "decoyboard"
       ]
     },
     {
@@ -730,9 +736,7 @@
           }
         }
       ],
-      "boards": [
-        "moonboard"
-      ],
+      "boards": [],
       "comps": {
         "active": false,
         "eventName": null,
@@ -742,8 +746,7 @@
       },
       "lines": [
         "bouldering",
-        "gp81",
-        "moonboard"
+        "gp81"
       ]
     },
     {
@@ -893,7 +896,7 @@
           }
         }
       ],
-      "boards": ["kilterboard"],
+      "boards": [],
       "comps": {
         "active": false,
         "eventName": null,
@@ -905,8 +908,7 @@
         "bouldering",
         "lead",
         "autobelay",
-        "brooklynboulders",
-        "kilterboard"
+        "brooklynboulders"
       ]
     },
     {
@@ -1118,11 +1120,11 @@
       ],
       "boards": [],
       "comps": {
-        "active": false,
-        "eventName": null,
-        "eventDate": null,
-        "source": null,
-        "lastChecked": "2026-07-21"
+        "active": true,
+        "eventName": "Brooklyn Boulderfest 2026",
+        "eventDate": "2026-09-25",
+        "source": "https://www.climbingnoise.com/event/brooklyn-boulderfest-2026-0095",
+        "lastChecked": "2026-07-26"
       },
       "lines": [
         "bouldering",
@@ -1180,6 +1182,136 @@
       "lines": [
         "bouldering",
         "brooklynuprising"
+      ]
+    },
+    {
+      "id": "central-rock-manhattan",
+      "name": "Central Rock Gym Manhattan",
+      "formerly": null,
+      "company": "centralrockgym",
+      "borough": "Manhattan",
+      "neighborhood": "Upper West Side",
+      "address": "21 West End Ave, New York, NY 10069",
+      "website": "https://centralrockgym.com/manhattan/",
+      "coords": {
+        "x": 250,
+        "y": 200
+      },
+      "coordsGeo": {
+        "lat": 40.7739,
+        "lng": -73.9894
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 10000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V10"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.11"
+            ]
+          }
+        },
+        {
+          "type": "autobelay",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.10"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-07-26"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "autobelay",
+        "centralrockgym"
+      ]
+    },
+    {
+      "id": "central-rock-chelsea",
+      "name": "Central Rock Gym Chelsea",
+      "formerly": null,
+      "company": "centralrockgym",
+      "borough": "Manhattan",
+      "neighborhood": "Chelsea",
+      "address": "537 W 27th St, New York, NY 10001",
+      "website": "https://centralrockgym.com/chelsea/",
+      "coords": {
+        "x": 275,
+        "y": 305
+      },
+      "coordsGeo": {
+        "lat": 40.7513,
+        "lng": -74.0037
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "nyc-metro",
+      "connection": {
+        "style": "solid",
+        "connectsTo": null
+      },
+      "sqft": 15000,
+      "notes": "Bouldering-only location \u2014 CRG's own FAQ directs anyone wanting top rope/auto-belay to the Manhattan location instead.",
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V11"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "kilterboard"
+      ],
+      "comps": {
+        "active": true,
+        "eventName": "The End of the Line",
+        "eventDate": "2026-08-22",
+        "source": "https://www.climbingnoise.com/event/the-end-of-the-line",
+        "lastChecked": "2026-07-26"
+      },
+      "lines": [
+        "bouldering",
+        "centralrockgym",
+        "kilterboard"
       ]
     }
   ]
