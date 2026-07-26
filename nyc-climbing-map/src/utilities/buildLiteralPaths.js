@@ -1,6 +1,12 @@
 import * as d3 from "d3";
 
-const BOROUGH_ORDER = ["Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island"];
+const BOROUGH_ORDER = [
+  "Manhattan", 
+  "Brooklyn", 
+  "Queens", 
+  "Bronx", 
+  "Staten Island"
+];
 const OFFSET_SPACING = 3; // px, unzoomed coordinate space
 const SAMPLES_PER_SEGMENT = 16; // higher = smoother curve, more points to compute
 
