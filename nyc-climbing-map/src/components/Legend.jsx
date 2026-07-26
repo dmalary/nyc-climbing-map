@@ -8,6 +8,20 @@ export default function Legend({ lineSystems, description, selectedLineId, onSel
           </p>
         )}
 
+        <div className="flex items-center gap-3 text-sm">
+          <span className="relative flex h-3 w-3 shrink-0">
+            <span
+              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+              style={{ backgroundColor: "#FF3B30" }}
+            />
+            <span
+              className="relative inline-flex rounded-full h-3 w-3"
+              style={{ backgroundColor: "#FF3B30" }}
+            />
+          </span>
+          <span className="text-gray-700">Upcoming comps</span>
+        </div>
+
         {Object.entries(lineSystems).map(([tierId, tier]) => (
           tier.label !== "Region" && (
             <div key={tierId}>
