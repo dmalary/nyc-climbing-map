@@ -277,9 +277,9 @@ export default function MapLiteral({
                 fill="transparent"
                 onMouseEnter={() => onHoverStation(station.id)}
                 onMouseLeave={() => onHoverStation(null)}
-                onClick={() => {
-                  if (hasComp) window.open(station.comps.source, "_blank", "noopener,noreferrer");
-                }}
+                // onClick={() => {
+                //   if (hasComp) window.open(station.comps.source, "_blank", "noopener,noreferrer");
+                // }}
                 style={{ cursor: hasComp ? "pointer" : "default" }}
               />
             );

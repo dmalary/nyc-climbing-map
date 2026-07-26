@@ -39,7 +39,7 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
   const iconsRowWidth = positioned.length ? cursorX + ICON_R * 2 : 0;
 
   const neighborhoodText = `${station.neighborhood}, ${station.borough}`;
-  const compText = hasComp ? `${station.comps.eventName ?? "Upcoming comp"} →` : "";
+  const compText = hasComp ? `${station.comps.eventName ?? "Upcoming comp"}` : "";
 
   // Rows: each has a height and a rendered content width, used to size the bubble
   const rows = [
