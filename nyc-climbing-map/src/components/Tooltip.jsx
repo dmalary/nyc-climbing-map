@@ -52,7 +52,9 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
   }
 
   const contentWidth = Math.max(...rows.map((r) => r.width));
-  const BUBBLE_W = Math.min(280, Math.max(150, contentWidth + PADDING * 2));
+  const MIN_BUBBLE_W = 200 / scale;
+  const MAX_BUBBLE_W = 280 / scale;
+  const BUBBLE_W = Math.min(MAX_BUBBLE_W, Math.max(MIN_BUBBLE_W, contentWidth + PADDING * 2));
   const BUBBLE_H = PADDING * 2 + rows.reduce((sum, r) => sum + r.height, 0) + ROW_GAP * (rows.length - 1);
 
   const placeAbove = station.y - GAP - BUBBLE_H > 0;
