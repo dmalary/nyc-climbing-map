@@ -27,8 +27,9 @@ export default function Legend({ lineSystems, description, selectedLineId, onSel
                       <button
                         onClick={() => onSelectLine(isSelected ? null : line.id)}
                         className={`flex items-center gap-2.5 text-sm w-full text-left px-2 py-1.5 rounded transition-colors ${
-                          isSelected ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
+                          isSelected ? "bg-gray-100 font-semibold" : "hover:bg-gray-100"
                         }`}
+                        style={{ cursor: "pointer" }}
                       >
                         <span
                           className="w-3 h-3 rounded-full shrink-0"
