@@ -30,7 +30,9 @@ export default function MapLiteral({
   selectedLineId,
   lineLookup,
   stationLabelPlacement,
-  lineBulletPlacement
+  lineBulletPlacement,
+  isMobile,
+  onTapStation
 }) {
   const svgRef = useRef(null);
   const [transform, setTransform] = useState(
@@ -259,18 +261,24 @@ export default function MapLiteral({
           })}
         </g>
 
+        {/* hit-regions */}
         <g className="hit-regions">
           {stations.map((station, i) => (
             <path
               key={station.id}
               d={voronoi.renderCell(i)}
               fill="transparent"
-              onMouseEnter={() => onHoverStation(station.id)}
-              onMouseLeave={() => onHoverStation(null)}
+              onMouseEnter={() => !isMobile && onHoverStation(station.id)}
+              onMouseLeave={() => !isMobile && onHoverStation(null)}
+              onClick={() => isMobile && onTapStation(station.id)}
               style={{ cursor: "pointer" }}
             />
           ))}
         </g>
+
+        {!isMobile && hoveredStation && (
+          <Tooltip station={hoveredStation} width={width} height={height} scale={transform.k} lineLookup={lineLookup} />
+        )}
 
         {hoveredStation && (
           <Tooltip

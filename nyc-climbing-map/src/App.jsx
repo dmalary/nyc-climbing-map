@@ -4,9 +4,11 @@ import * as d3 from "d3";
 import MapLiteral from "./components/MapLiteral.jsx";
 import Legend from "./components/Legend.jsx";
 import Footer from "./components/Footer.jsx";
+import StationSheet from "./components/StationSheet.jsx";
 
 import { buildLinePaths } from "./utilities/buildLiteralPaths.js";
 import { placeLabels, lineObstacleRects } from "./utilities/labelPlacement.js";
+import { useIsMobile } from "./utilities/useIsMobile.js";
 import { WIDTH, HEIGHT, LINE_STROKE_WIDTH } from "./constants.js";
 
 import gymData from "./data/nyc-climbing-gyms.json"; // small, keep as static import
@@ -18,6 +20,10 @@ export default function App() {
   // Geo data now loads at runtime instead of bundling
   const [nycBoroughs, setNycBoroughs] = useState(null);
   const [parksData, setParksData] = useState(null);
+
+  const [tappedId, setTappedId] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     fetch("/data/Borough_Boundaries_20260720.json")
@@ -70,6 +76,8 @@ export default function App() {
 
   const hoveredGym = stations.find((s) => s.id === hoveredId) ?? null;
 
+  const tappedStation = stations.find((s) => s.id === tappedId) ?? null;
+
   // Boroughs are the one truly required layer — wait on that before rendering the map
   if (!nycBoroughs) {
     return (
@@ -81,10 +89,19 @@ export default function App() {
 
   return (
     <div className="w-full h-screen flex flex-col bg-black">
-      <header className="h-16 flex items-center px-6 bg-black shrink-0">
+      <header className="h-24 flex items-end justify-between px-8 pb-5 bg-black shrink-0">
         <h1 className="text-white text-2xl md:text-4xl font-medium tracking-wide">
           {gymData.meta.title}
         </h1>
+        {isMobile && (
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="text-white text-2xl pb-1"
+            aria-label="Open legend"
+          >
+            ☰
+          </button>
+        )}
       </header>
 
       <div className="flex flex-1 min-h-0">
@@ -102,16 +119,43 @@ export default function App() {
             selectedLineId={selectedLineId}
             lineLookup={lineLookup}
             stationLabelPlacement={stationLabelPlacement}
+            isMobile={isMobile}
+            onTapStation={setTappedId}
           />
         </div>
 
-        <Legend
-          lineSystems={gymData.lineSystems}
-          description={gymData.meta.description}
-          selectedLineId={selectedLineId}
-          onSelectLine={setSelectedLineId}
-        />
+        {!isMobile && (
+          <Legend
+            lineSystems={gymData.lineSystems}
+            description={gymData.meta.description}
+            selectedLineId={selectedLineId}
+            onSelectLine={setSelectedLineId}
+          />
+        )}
       </div>
+
+      {/* mobile legend drawer */}
+      {isMobile && drawerOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          <div className="flex-1 bg-black/40" onClick={() => setDrawerOpen(false)} />
+          <div className="w-80 max-w-[85vw] bg-white overflow-y-auto">
+            <button onClick={() => setDrawerOpen(false)} className="p-4 text-xl" aria-label="Close">
+              ✕
+            </button>
+            <Legend
+              lineSystems={gymData.lineSystems}
+              description={gymData.meta.description}
+              selectedLineId={selectedLineId}
+              onSelectLine={setSelectedLineId}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* mobile tap-to-open sheet */}
+      {isMobile && tappedStation && (
+        <StationSheet station={tappedStation} lineLookup={lineLookup} onClose={() => setTappedId(null)} />
+      )}
       <Footer />
     </div>
   );
