@@ -30,7 +30,7 @@ export default function App() {
       .then((res) => res.json())
       .then(setNycBoroughs);
 
-    fetch("/data/Parks_Properties_20260721.json")
+    fetch("/data/nyc-flagship-parks.json")
       .then((res) => res.json())
       .then(setParksData);
   }, []);
@@ -62,10 +62,7 @@ export default function App() {
 
   const linePaths = useMemo(() => buildLinePaths(stations, gymData.lineSystems), [stations]);
 
-  const flagshipParks = useMemo(() => {
-    if (!parksData) return [];
-    return parksData.features.filter((f) => f.properties.typecategory === "Flagship Park");
-  }, [parksData]);
+  const flagshipParks = parksData?.features ?? [];
 
   const stationLabelPlacement = useMemo(() => {
     const lineRects = lineObstacleRects(linePaths, LINE_STROKE_WIDTH);
@@ -89,7 +86,7 @@ export default function App() {
 
   return (
     <div className="w-full h-screen flex flex-col bg-black">
-      <header className="h-24 flex items-end justify-between px-8 pb-5 bg-black shrink-0">
+      <header className="h-20 flex items-end justify-between px-8 pb-5 bg-black shrink-0">
         <h1 className="text-white text-2xl md:text-4xl font-medium tracking-wide">
           {gymData.meta.title}
         </h1>
