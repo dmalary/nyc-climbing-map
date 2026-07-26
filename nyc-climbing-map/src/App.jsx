@@ -4,7 +4,7 @@ import * as d3 from "d3";
 import MapLiteral from "./components/MapLiteral.jsx";
 import Legend from "./components/Legend.jsx";
 import Footer from "./components/Footer.jsx";
-import StationSheet from "./components/StationSheet.jsx";
+import MobileToolTip from "./components/MobileToolTip.jsx";
 
 import { buildLinePaths } from "./utilities/buildLiteralPaths.js";
 import { placeLabels, lineObstacleRects } from "./utilities/labelPlacement.js";
@@ -151,7 +151,7 @@ export default function App() {
 
       {/* mobile tap-to-open sheet */}
       {isMobile && tappedStation && (
-        <StationSheet station={tappedStation} lineLookup={lineLookup} onClose={() => setTappedId(null)} />
+        <MobileToolTip station={tappedStation} lineLookup={lineLookup} onClose={() => setTappedId(null)} />
       )}
       <Footer />
     </div>

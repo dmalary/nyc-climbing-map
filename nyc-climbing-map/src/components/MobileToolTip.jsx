@@ -1,6 +1,8 @@
 import { TIER_ORDER } from "../constants.js";
 
-export default function StationSheet({ station, lineLookup, onClose }) {
+export default function MobileToolTip({ station, lineLookup, onClose }) {
+  const hasComp = station.comps?.active && station.comps?.source;
+
   const orderedLines = [...station.lines]
     .filter((id) => lineLookup?.[id])
     .sort((a, b) => TIER_ORDER[lineLookup[a].tierId] - TIER_ORDER[lineLookup[b].tierId]);
@@ -40,14 +42,14 @@ export default function StationSheet({ station, lineLookup, onClose }) {
           })}
         </div>
 
-        {station.website && (
+        {hasComp && (
           <a
-            href={station.website}
+            href={station.comps.source}
             target="_blank"
             rel="noreferrer"
-            className="block text-sm underline text-gray-700"
+            className="block text-sm underline text-red-600 font-semibold"
           >
-            Visit website →
+            {station.comps.eventName ?? "Upcoming comp"} →
           </a>
         )}
       </div>

@@ -109,15 +109,17 @@ export default function MapLiteral({
           ))}
         </g>
 
+        {/* FIX ME */}
         {/* <g className="parks">
           {parkFeatures.map((feature, i) => (
-            <path key={i} d={pathGenerator(feature)} fill="#c3d6a8" fillRule="evenodd" stroke="none" />
-          ))}
-        </g> */}
-
-        {/* <g className="parks">
-          {parkFeatures.map((feature, i) => (
-            <path key={i} d={pathGenerator(feature)} fill="none" stroke="#c3d6a8" strokeWidth={2 / transform.k} />
+            <path
+              key={i}
+              d={pathGenerator(feature)}
+              fill="none"
+              stroke="#607345"
+              strokeWidth={2 / transform.k}
+              fillRule="evenodd"
+            />
           ))}
         </g> */}
 
@@ -199,6 +201,8 @@ export default function MapLiteral({
             const opacity = stationOpacity(station);
             const pillScale = 1 / Math.sqrt(transform.k);
 
+            const hasActiveComp = station.comps?.active;
+
             let bullet;
             if (lineCount >= 4) {
               bullet = (
@@ -245,6 +249,7 @@ export default function MapLiteral({
                 opacity={opacity}
                 style={{ transition: "opacity 200ms ease" }}
               >
+                {hasActiveComp && <CompPulse lineCount={lineCount} />}
                 {bullet}
                 <text
                   x={dx}
@@ -263,17 +268,22 @@ export default function MapLiteral({
 
         {/* hit-regions */}
         <g className="hit-regions">
-          {stations.map((station, i) => (
-            <path
-              key={station.id}
-              d={voronoi.renderCell(i)}
-              fill="transparent"
-              onMouseEnter={() => !isMobile && onHoverStation(station.id)}
-              onMouseLeave={() => !isMobile && onHoverStation(null)}
-              onClick={() => isMobile && onTapStation(station.id)}
-              style={{ cursor: "pointer" }}
-            />
-          ))}
+          {stations.map((station, i) => {
+            const hasComp = station.comps?.active && station.comps?.source;
+            return (
+              <path
+                key={station.id}
+                d={voronoi.renderCell(i)}
+                fill="transparent"
+                onMouseEnter={() => onHoverStation(station.id)}
+                onMouseLeave={() => onHoverStation(null)}
+                onClick={() => {
+                  if (hasComp) window.open(station.comps.source, "_blank", "noopener,noreferrer");
+                }}
+                style={{ cursor: hasComp ? "pointer" : "default" }}
+              />
+            );
+          })}
         </g>
 
         {!isMobile && hoveredStation && (
@@ -314,5 +324,22 @@ function LineBullet({ x, y, color, label, radius, scale }) {
         {label}
       </text>
     </g>
+  );
+}
+
+// New small component, define alongside LineBullet
+function CompPulse({ lineCount }) {
+  const r = lineCount >= 4 ? 20 : lineCount >= 2 ? 12 : 10;
+  return (
+    <circle
+      r={r}
+      fill="none"
+      stroke="#FF3B30"
+      strokeWidth={2}
+      opacity={0.7}
+    >
+      <animate attributeName="r" values={`${r};${r + 6};${r}`} dur="1.8s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.7;0;0.7" dur="1.8s" repeatCount="indefinite" />
+    </circle>
   );
 }
