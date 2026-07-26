@@ -255,7 +255,7 @@ export default function MapLiteral({
                   x={dx}
                   y={dy}
                   textAnchor={textAnchor}
-                  fontSize={11 / transform.k}
+                  fontSize={12 / transform.k}
                   fontFamily='"Helvetica Neue", Helvetica, Arial, sans-serif'
                   fill="#111"
                 >
