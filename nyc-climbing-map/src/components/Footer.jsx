@@ -9,7 +9,7 @@ export default function Footer() {
           rel="noreferrer"
           className="underline hover:text-white transition-colors"
         >
-          MTA Colors, data.ny.gov
+          MTA Colors
         </a>
         {" · "}
         <a
@@ -20,18 +20,22 @@ export default function Footer() {
         >
           Borough Boundaries
         </a>
-        {" · "}
-        <a
+        {/* {" · "} */}
+        {/* <a
           href="https://data.cityofnewyork.us/Recreation/Parks-Properties/enfh-gkve"
           target="_blank"
           rel="noreferrer"
           className="underline hover:text-white transition-colors"
         >
           Parks Properties
-        </a>
-        {", NYC Open Data"}
+        </a> */}
+        {/* {", NYC Open Data"} */}
       </p>
-      <p>David Malary, 2026</p>
+      <p>
+        <a href="https://github.com/dmalary/nyc-climbing-map" target="_blank" rel="noreferrer" className="underline hover:text-white transition-colors">GitHub</a>
+        {" · "}
+        David Malary, 2026
+      </p>
     </footer>
   );
 }
