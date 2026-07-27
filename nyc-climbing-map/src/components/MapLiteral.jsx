@@ -14,8 +14,11 @@ import {
   DIMMED_OPACITY,
   SELECTED_OPACITY,
   DEFAULT_OPACITY,
-  BULLET_OFFSET
+  BULLET_OFFSET,
+  STATION_LABEL_FONT_SIZE
 } from "../constants.js";
+
+import { wrapLabel } from "../utilities/labelPlacement.js";
 
 export default function MapLiteral({
   width,
@@ -251,16 +254,26 @@ export default function MapLiteral({
               >
                 {hasActiveComp && <CompPulse lineCount={lineCount} />}
                 {bullet}
-                <text
-                  x={dx}
-                  y={dy}
-                  textAnchor={textAnchor}
-                  fontSize={12 / transform.k}
-                  fontFamily='"Helvetica Neue", Helvetica, Arial, sans-serif'
-                  fill="#111"
-                >
-                  {station.name}
-                </text>
+                {(() => {
+                  const lines = wrapLabel(station.name, 3);
+                  const lineHeight = STATION_LABEL_FONT_SIZE / transform.k * 1.15;
+                  return (
+                    <text
+                      x={dx}
+                      y={dy}
+                      textAnchor={textAnchor}
+                      fontSize={STATION_LABEL_FONT_SIZE / transform.k}
+                      fontFamily='"Helvetica Neue", Helvetica, Arial, sans-serif'
+                      fill="#111"
+                    >
+                      {lines.map((line, i) => (
+                        <tspan key={i} x={dx} dy={i === 0 ? 0 : lineHeight}>
+                          {line}
+                        </tspan>
+                      ))}
+                    </text>
+                  );
+                })()}
               </g>
             );
           })}

@@ -10,14 +10,14 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
 
   const fontScale = 1 / scale;
   const PADDING = 12 * fontScale;
-  const ROW_GAP = 8 * fontScale;
+  const ROW_GAP = 9 * fontScale;
   const GAP = 18 * fontScale;
   const TAIL = 9 * fontScale;
 
-  const NAME_FONT = 13 * fontScale;
-  const SUBTEXT_FONT = 11 * fontScale;
+  const NAME_FONT = 15 * fontScale;
+  const SUBTEXT_FONT = 13 * fontScale;
   const ICON_R = 8 * fontScale;
-  const ICON_FONT = 9 * fontScale;
+  const ICON_FONT = 11 * fontScale;
   const CHAR_GAP = ICON_FONT * 0.6;
   const GROUP_GAP = CHAR_GAP * 2;
   const iconSpacing = ICON_R * 2 + 8 * fontScale;
@@ -55,7 +55,7 @@ export default function Tooltip({ station, width, height, scale, lineLookup }) {
   const MIN_BUBBLE_W = 200 / scale;
   const MAX_BUBBLE_W = 280 / scale;
   const BUBBLE_W = Math.min(MAX_BUBBLE_W, Math.max(MIN_BUBBLE_W, contentWidth + PADDING * 2));
-  const BUBBLE_H = PADDING * 2 + rows.reduce((sum, r) => sum + r.height, 0) + ROW_GAP * (rows.length - 1);
+  const BUBBLE_H = PADDING * 2.3 + rows.reduce((sum, r) => sum + r.height, 0) + ROW_GAP * (rows.length - 1);
 
   const placeAbove = station.y - GAP - BUBBLE_H > 0;
   const bubbleY = placeAbove ? station.y - GAP - BUBBLE_H : station.y + GAP;

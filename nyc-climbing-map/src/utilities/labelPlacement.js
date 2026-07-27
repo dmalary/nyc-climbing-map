@@ -100,3 +100,20 @@ export function lineObstacleRects(linePaths, strokeWidth, sampleStride = 4) {
   });
   return rects;
 }
+
+export function wrapLabel(text, maxLines = 3) {
+  const words = text.split(" ").filter(Boolean);
+  const lineCount = Math.min(maxLines, words.length) || 1;
+
+  const base = Math.floor(words.length / lineCount);
+  const extra = words.length % lineCount;
+
+  const lines = [];
+  let idx = 0;
+  for (let i = 0; i < lineCount; i++) {
+    const count = base + (i < extra ? 1 : 0);
+    lines.push(words.slice(idx, idx + count).join(" "));
+    idx += count;
+  }
+  return lines;
+}

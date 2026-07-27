@@ -14,3 +14,5 @@ export const DEFAULT_OPACITY = 0.85;
 export const BULLET_OFFSET = 14; 
 
 export const TIER_ORDER = { company: 0, climbType: 1, board: 2 };
+
+export const STATION_LABEL_FONT_SIZE = 16; 
