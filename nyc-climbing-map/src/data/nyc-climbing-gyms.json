@@ -2,8 +2,8 @@
   "meta": {
     "title": "New York City Climbing",
     "description": "A map of NYC's gyms that thinks like a transit map. Instead of train lines, each colored line traces a shared discipline, company, or training board \u2014 click through to highlight each type.",
-    "lastVerified": "2026-07-21",
-    "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below. Split the former combined 'vital-wh-ues' entry into two real, separately-addressed gyms (vital-west-harlem, vital-upper-east-side). Added boulderingproject-gowanus (the rebranded original 2009 Brooklyn Boulders flagship site, now under the Bouldering Project brand) and brooklyn-uprising (new independent DUMBO gym, opened 2026). Both new companies added to lineSystems.company with unique MTA-family colors.",
+    "lastVerified": "2026-08-02",
+    "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below. Split the former combined 'vital-wh-ues' entry into two real, separately-addressed gyms (vital-west-harlem, vital-upper-east-side). Added boulderingproject-gowanus (the rebranded original 2009 Brooklyn Boulders flagship site, now under the Bouldering Project brand) and brooklyn-uprising (new independent DUMBO gym, opened 2026). Both new companies added to lineSystems.company with unique MTA-family colors. Added Central Rock Gym (2 NYC locations: Manhattan and Chelsea \u2014 the Chelsea location is bouldering-only, per CRG's own FAQ). Removed chelsea-piers-brooklyn \u2014 that location does not actually offer climbing, only the Manhattan Chelsea Piers location does; chelseapiers is now a single-station company as a result. Added the first out-of-metro gyms, all on `region` !== 'nyc-metro' with a dashed `connection` back to an NYC anchor gym: The Gravity Vault (Hoboken, NJ and Westbury, Long Island \u2014 note the actual Gravity Vault Jersey City location closed July 31, 2026, so Hoboken stands in for that area), Method Climbing (Newark, NJ, independent), Island Rock (Plainview, Long Island, independent), and Movement Valhalla (Hudson Valley/upstate \u2014 joins the existing 'movement' company rather than needing a new one). Note: the actual dashed-connector line rendering isn't built yet \u2014 this is data-only. Also note buildLiteralPaths' borough-ordering logic only recognizes the 5 NYC boroughs, so out-of-metro gyms (borough values like 'New Jersey', 'Long Island', 'Hudson Valley') are currently silently excluded from their company's main bundled line path until the dashed-spur rendering is built to handle them separately.",
     "colorSource": {
       "dataset": "MTA Colors \u2014 data.ny.gov",
       "url": "https://data.ny.gov/Transportation/MTA-Colors/3uhz-sej2/about_data",
@@ -127,6 +127,24 @@
           "name": "Central Rock Gym",
           "color": "#799534",
           "shortLabel": "CRG"
+        },
+        {
+          "id": "gravityvault",
+          "name": "The Gravity Vault",
+          "color": "#7C858C",
+          "shortLabel": "GV"
+        },
+        {
+          "id": "methodclimbing",
+          "name": "Method Climbing",
+          "color": "#00985F",
+          "shortLabel": "MC"
+        },
+        {
+          "id": "islandrock",
+          "name": "Island Rock",
+          "color": "#C60C30",
+          "shortLabel": "IR"
         }
       ],
       "subtitle": "who runs it"
@@ -975,58 +993,6 @@
       ]
     },
     {
-      "id": "chelsea-piers-brooklyn",
-      "name": "Chelsea Piers Fitness \u2014 Downtown Brooklyn",
-      "formerly": null,
-      "company": "chelseapiers",
-      "borough": "Brooklyn",
-      "neighborhood": "Boerum Hill",
-      "address": "1 Boerum Pl, Brooklyn, NY 11201",
-      "website": "https://fitness.chelseapiers.com/locations/downtown-brooklyn",
-      "coords": {
-        "x": 320,
-        "y": 400
-      },
-      "coordsGeo": {
-        "lat": 40.6924,
-        "lng": -73.9903
-      },
-      "labelOffset": {
-        "dx": 10,
-        "dy": 4
-      },
-      "region": "nyc-metro",
-      "connection": {
-        "style": "solid",
-        "connectsTo": null
-      },
-      "sqft": 5000,
-      "types": [
-        {
-          "type": "toprope",
-          "grading": {
-            "system": "YDS",
-            "range": [
-              "5.6",
-              "5.10"
-            ]
-          }
-        }
-      ],
-      "boards": [],
-      "comps": {
-        "active": false,
-        "eventName": null,
-        "eventDate": null,
-        "source": null,
-        "lastChecked": "2026-07-17"
-      },
-      "lines": [
-        "toprope",
-        "chelseapiers"
-      ]
-    },
-    {
       "id": "manhattan-plaza-hc",
       "name": "Manhattan Plaza Health Club",
       "formerly": null,
@@ -1312,6 +1278,386 @@
         "bouldering",
         "centralrockgym",
         "kilterboard"
+      ]
+    },
+    {
+      "id": "gravity-vault-hoboken",
+      "name": "The Gravity Vault Hoboken",
+      "formerly": null,
+      "company": "gravityvault",
+      "borough": "New Jersey",
+      "neighborhood": "Hoboken",
+      "address": "1423 Clinton St, Hoboken, NJ 07030",
+      "website": "https://gravityvault.com/locations/hoboken-nj",
+      "coords": {
+        "x": 100,
+        "y": 310
+      },
+      "coordsGeo": {
+        "lat": 40.7434,
+        "lng": -74.0296
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "new-jersey",
+      "connection": {
+        "style": "dashed",
+        "connectsTo": "chelsea-piers-manhattan"
+      },
+      "sqft": 25000,
+      "notes": "Not in Jersey City proper \u2014 the actual Gravity Vault Jersey City location closed July 31, 2026. Hoboken is the nearest still-open location under the same company.",
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V10"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.8",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "autobelay",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.5",
+              "5.10"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "moonboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-08-02"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "lead",
+        "autobelay",
+        "gravityvault",
+        "moonboard"
+      ]
+    },
+    {
+      "id": "method-climbing-newark",
+      "name": "Method Climbing",
+      "formerly": null,
+      "company": "methodclimbing",
+      "borough": "New Jersey",
+      "neighborhood": "Newark",
+      "address": "16 Lombardy St, Newark, NJ 07102",
+      "website": "https://www.methodclimbing.com/",
+      "coords": {
+        "x": 60,
+        "y": 340
+      },
+      "coordsGeo": {
+        "lat": 40.7357,
+        "lng": -74.1724
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "new-jersey",
+      "connection": {
+        "style": "dashed",
+        "connectsTo": "vital-les"
+      },
+      "sqft": 22000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V11"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.11"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-08-02"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "methodclimbing"
+      ]
+    },
+    {
+      "id": "island-rock-plainview",
+      "name": "Island Rock",
+      "formerly": null,
+      "company": "islandrock",
+      "borough": "Long Island",
+      "neighborhood": "Plainview",
+      "address": "60 Skyline Dr, Plainview, NY 11803",
+      "website": "https://www.islandrockgym.com/",
+      "coords": {
+        "x": 650,
+        "y": 260
+      },
+      "coordsGeo": {
+        "lat": 40.7773,
+        "lng": -73.4757
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "long-island",
+      "connection": {
+        "style": "dashed",
+        "connectsTo": "bkb-queensbridge"
+      },
+      "sqft": 14000,
+      "notes": "Opened 1996 \u2014 central Long Island's original climbing gym. Bouldering assumed present (very common at this facility size/type) but not explicitly confirmed in sourcing, unlike top rope and lead which are confirmed.",
+      "types": [
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.11"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.8",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V9"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-08-02"
+      },
+      "lines": [
+        "toprope",
+        "lead",
+        "bouldering",
+        "islandrock"
+      ]
+    },
+    {
+      "id": "gravity-vault-westbury",
+      "name": "The Gravity Vault Westbury",
+      "formerly": null,
+      "company": "gravityvault",
+      "borough": "Long Island",
+      "neighborhood": "Westbury",
+      "address": "1500 Old Country Rd, Westbury, NY 11590 (Samanea Mall, 2nd Floor)",
+      "website": "https://gravityvault.com/locations/westbury-ny",
+      "coords": {
+        "x": 680,
+        "y": 230
+      },
+      "coordsGeo": {
+        "lat": 40.7576,
+        "lng": -73.5851
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "long-island",
+      "connection": {
+        "style": "dashed",
+        "connectsTo": "movement-lic"
+      },
+      "sqft": 18000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V10"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.11"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.8",
+              "5.11"
+            ]
+          }
+        }
+      ],
+      "boards": [
+        "kilterboard",
+        "tensionboard"
+      ],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-08-02"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "lead",
+        "gravityvault",
+        "kilterboard",
+        "tensionboard"
+      ]
+    },
+    {
+      "id": "movement-valhalla",
+      "name": "Movement Valhalla",
+      "formerly": "The Cliffs at Valhalla",
+      "company": "movement",
+      "borough": "Hudson Valley",
+      "neighborhood": "Valhalla, Westchester County",
+      "address": "1 Commerce St, Valhalla, NY 10595",
+      "website": "https://movementgyms.com/valhalla/",
+      "coords": {
+        "x": 290,
+        "y": 40
+      },
+      "coordsGeo": {
+        "lat": 41.0765,
+        "lng": -73.7846
+      },
+      "labelOffset": {
+        "dx": 10,
+        "dy": 4
+      },
+      "region": "hudson-valley",
+      "connection": {
+        "style": "dashed",
+        "connectsTo": "movement-harlem"
+      },
+      "sqft": 13000,
+      "types": [
+        {
+          "type": "bouldering",
+          "grading": {
+            "system": "V-Scale",
+            "range": [
+              "VB",
+              "V11"
+            ]
+          }
+        },
+        {
+          "type": "toprope",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.6",
+              "5.12"
+            ]
+          }
+        },
+        {
+          "type": "lead",
+          "grading": {
+            "system": "YDS",
+            "range": [
+              "5.8",
+              "5.13"
+            ]
+          }
+        }
+      ],
+      "boards": [],
+      "comps": {
+        "active": false,
+        "eventName": null,
+        "eventDate": null,
+        "source": null,
+        "lastChecked": "2026-08-02"
+      },
+      "lines": [
+        "bouldering",
+        "toprope",
+        "lead",
+        "movement"
       ]
     }
   ]

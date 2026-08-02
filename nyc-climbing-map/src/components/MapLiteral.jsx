@@ -35,7 +35,8 @@ export default function MapLiteral({
   stationLabelPlacement,
   lineBulletPlacement,
   isMobile,
-  onTapStation
+  onTapStation,
+  regionConnectors
 }) {
   const svgRef = useRef(null);
   const [transform, setTransform] = useState(
@@ -126,6 +127,19 @@ export default function MapLiteral({
           ))}
         </g> */}
 
+        <g className="region-connectors">
+          {regionConnectors.map((conn) => (
+            <line
+              key={conn.id}
+              x1={conn.from.x} y1={conn.from.y}
+              x2={conn.to.x} y2={conn.to.y}
+              stroke="#000000"
+              strokeWidth={3 / transform.k}
+              strokeDasharray={`${8 / transform.k} ${5 / transform.k}`}
+            />
+          ))}
+        </g>
+
         <g className="lines">
           {linePaths.map((line) => {
             const opacity = lineOpacity(line.id);
@@ -196,7 +210,9 @@ export default function MapLiteral({
 
         <g className="stations" style={{ pointerEvents: "none" }}>
           {stations.map((station) => {
-            const lineCount = station.lines.length;
+            // const lineCount = station.lines.length;
+            const isMetro = station.region === "nyc-metro";
+            const lineCount = isMetro ? station.lines.length : 1;
             const isHovered = station.id === hoveredId;
             const computed = stationLabelPlacement?.[station.id];
             const { dx, dy } = computed ?? station.labelOffset ?? { dx: 10, dy: 4 };

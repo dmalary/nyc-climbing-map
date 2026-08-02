@@ -22,7 +22,12 @@ export function buildLinePaths(stations, lineSystems) {
   for (const [tierId, tier] of Object.entries(lineSystems)) {
     if (tierId === "region") continue;
     for (const line of tier.lines) {
-      const members = stations.filter((s) => s.lines.includes(line.id));
+      // const members = stations.filter((s) => s.lines.includes(line.id));
+
+      const members = stations
+        .filter((s) => s.lines.includes(line.id))
+        .filter((s) => s.region === "nyc-metro"); // out-of-metro stations get their own dashed-spur treatment, not the bundled path
+
       if (members.length < 2) continue;
 
       const ordered = line.stationOrder

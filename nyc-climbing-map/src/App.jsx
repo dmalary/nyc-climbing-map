@@ -7,6 +7,7 @@ import Footer from "./components/Footer.jsx";
 import MobileToolTip from "./components/MobileToolTip.jsx";
 
 import { buildLinePaths } from "./utilities/buildLiteralPaths.js";
+import { buildRegionConnectors, layoutOutOfMetroStations } from "./utilities/buildRegionConnectors.js";
 import { placeLabels, lineObstacleRects } from "./utilities/labelPlacement.js";
 import { useIsMobile } from "./utilities/useIsMobile.js";
 import { WIDTH, HEIGHT, LINE_STROKE_WIDTH } from "./constants.js";
@@ -42,13 +43,13 @@ export default function App() {
 
   const pathGenerator = useMemo(() => d3.geoPath(projection), [projection]);
 
-  const stations = useMemo(
-    () => gymData.gyms.map((gym) => {
+  const stations = useMemo(() => {
+    const projected = gymData.gyms.map((gym) => {
       const [x, y] = projection([gym.coordsGeo.lng, gym.coordsGeo.lat]);
       return { ...gym, x, y };
-    }),
-    [projection]
-  );
+    });
+    return layoutOutOfMetroStations(projected);
+  }, [projection]);
 
   const lineLookup = useMemo(() => {
     const map = {};
@@ -70,6 +71,8 @@ export default function App() {
     const { offsets } = placeLabels(items, { labelWidth: 90, labelHeight: 14, distance: 12 }, lineRects);
     return offsets;
   }, [stations, linePaths]);
+
+  const regionConnectors = useMemo(() => buildRegionConnectors(stations), [stations]);
 
   const hoveredGym = stations.find((s) => s.id === hoveredId) ?? null;
 
@@ -118,6 +121,7 @@ export default function App() {
             stationLabelPlacement={stationLabelPlacement}
             isMobile={isMobile}
             onTapStation={setTappedId}
+            regionConnectors={regionConnectors}
           />
         </div>
 
