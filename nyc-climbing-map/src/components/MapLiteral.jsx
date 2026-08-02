@@ -43,7 +43,7 @@ export default function MapLiteral({
     d3.zoomIdentity
       .translate(width / 3, height / 2.5)
       .scale(INITIAL_ZOOM_SCALE)
-      .translate(-width / 3, -height / 2.5)
+      .translate(-width / 3, -height)
   );
 
   useEffect(() => {
@@ -73,14 +73,28 @@ export default function MapLiteral({
 
   const hoveredStation = stations.find((s) => s.id === hoveredId) ?? null;
 
+  // near your existing lineOpacity/stationOpacity functions:
+  const selectedTierId = lineLookup?.[selectedLineId]?.tierId;
+  const isRegionSelected = selectedTierId === "region";
+
   const lineOpacity = (lineId) => {
+    if (isRegionSelected) return DIMMED_OPACITY; // a region pick backgrounds the whole metro network
     if (!selectedLineId) return DEFAULT_OPACITY;
     return lineId === selectedLineId ? SELECTED_OPACITY : DIMMED_OPACITY;
   };
 
   const stationOpacity = (station) => {
+    if (isRegionSelected) {
+      return station.region === selectedLineId ? 1 : 0.15;
+    }
     if (!selectedLineId) return 1;
     return station.lines.includes(selectedLineId) ? 1 : 0.25;
+  };
+
+  const regionConnectorOpacity = (conn) => {
+    if (isRegionSelected) return conn.region === selectedLineId ? 1 : 0.1;
+    if (selectedLineId) return 0.15; // a normal line is selected — connectors are unrelated, background them
+    return 0.85; // nothing selected — connectors at their normal default
   };
 
   function offsetFromPath(atPoint, prevPoint, nextPoint, distance) {
@@ -127,18 +141,20 @@ export default function MapLiteral({
           ))}
         </g> */}
 
-        <g className="region-connectors">
-          {regionConnectors.map((conn) => (
-            <line
-              key={conn.id}
-              x1={conn.from.x} y1={conn.from.y}
-              x2={conn.to.x} y2={conn.to.y}
-              stroke="#000000"
-              strokeWidth={3 / transform.k}
-              strokeDasharray={`${8 / transform.k} ${5 / transform.k}`}
-            />
-          ))}
-        </g>
+      <g className="region-connectors">
+        {regionConnectors.map((conn) => (
+          <line
+            key={conn.id}
+            x1={conn.from.x} y1={conn.from.y}
+            x2={conn.to.x} y2={conn.to.y}
+            stroke="#000000"
+            strokeWidth={3 / transform.k}
+            strokeDasharray={`${8 / transform.k} ${5 / transform.k}`}
+            opacity={regionConnectorOpacity(conn)}
+            style={{ transition: "opacity 200ms ease" }}
+          />
+        ))}
+      </g>
 
         <g className="lines">
           {linePaths.map((line) => {

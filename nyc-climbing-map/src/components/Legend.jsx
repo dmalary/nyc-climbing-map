@@ -22,8 +22,9 @@ export default function Legend({ lineSystems, description, selectedLineId, onSel
           <span className="text-gray-700">Upcoming comps</span>
         </div>
 
-        {Object.entries(lineSystems).map(([tierId, tier]) => (
-          tier.label !== "Region" && (
+        {Object.entries(lineSystems)
+          .filter(([tierId]) => tierId !== "region")
+          .map(([tierId, tier]) => (
             <div key={tierId}>
               <div className="mb-3">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400">
@@ -56,8 +57,50 @@ export default function Legend({ lineSystems, description, selectedLineId, onSel
                 })}
               </ul>
             </div>
-          )
-        ))}
+          ))}
+
+          {lineSystems.region && (
+            <div>
+              <div className="mb-3">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                  {lineSystems.region.label}
+                </h2>
+                {lineSystems.region.description && (
+                  <p className="text-xs text-gray-400 italic mt-0.5">
+                    {lineSystems.region.description}
+                  </p>
+                )}
+              </div>
+              <ul className="space-y-2">
+                {lineSystems.region.lines
+                  .filter((r) => r.id !== "nyc-metro")
+                  .map((r) => {
+                    const isSelected = r.id === selectedLineId;
+                    return (
+                      <li key={r.id}>
+                        <button
+                          onClick={() => onSelectLine(isSelected ? null : r.id)}
+                          className={`flex items-center gap-2.5 text-sm w-full text-left px-2 py-1.5 rounded transition-colors ${
+                            isSelected ? "bg-gray-100 font-semibold" : "hover:bg-gray-100"
+                          }`}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <svg width="16" height="12" className="shrink-0">
+                            <line
+                              x1="0" y1="6" x2="16" y2="6"
+                              stroke="black"
+                              strokeWidth="2"
+                              strokeDasharray={r.connectionStyle === "dashed" ? "3 2" : "0"}
+                            />
+                          </svg>
+                          {r.name}
+                        </button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          )}
       </div>
     </aside>
   );
