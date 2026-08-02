@@ -3,7 +3,7 @@
     "title": "New York City Climbing",
     "description": "A map of NYC's gyms that thinks like a transit map. Instead of train lines, each colored line traces a shared discipline, company, or training board \u2014 click through to highlight each type.",
     "lastVerified": "2026-08-02",
-    "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below. Split the former combined 'vital-wh-ues' entry into two real, separately-addressed gyms (vital-west-harlem, vital-upper-east-side). Added boulderingproject-gowanus (the rebranded original 2009 Brooklyn Boulders flagship site, now under the Bouldering Project brand) and brooklyn-uprising (new independent DUMBO gym, opened 2026). Both new companies added to lineSystems.company with unique MTA-family colors. Added Central Rock Gym (2 NYC locations: Manhattan and Chelsea \u2014 the Chelsea location is bouldering-only, per CRG's own FAQ). Removed chelsea-piers-brooklyn \u2014 that location does not actually offer climbing, only the Manhattan Chelsea Piers location does; chelseapiers is now a single-station company as a result. Added the first out-of-metro gyms, all on `region` !== 'nyc-metro' with a dashed `connection` back to an NYC anchor gym: The Gravity Vault (Hoboken, NJ and Westbury, Long Island \u2014 note the actual Gravity Vault Jersey City location closed July 31, 2026, so Hoboken stands in for that area), Method Climbing (Newark, NJ, independent), Island Rock (Plainview, Long Island, independent), and Movement Valhalla (Hudson Valley/upstate \u2014 joins the existing 'movement' company rather than needing a new one). Note: the actual dashed-connector line rendering isn't built yet \u2014 this is data-only. Also note buildLiteralPaths' borough-ordering logic only recognizes the 5 NYC boroughs, so out-of-metro gyms (borough values like 'New Jersey', 'Long Island', 'Hudson Valley') are currently silently excluded from their company's main bundled line path until the dashed-spur rendering is built to handle them separately.",
+    "notes": "Each gym has two coordinate systems: `coords` (schematic x/y grid for the Vignelli-style abstracted map) and `coordsGeo` (real lat/lng for a literal, geographically-projected map \u2014 feed through d3.geoMercator() or geoAlbersUsa() for SVG placement). coordsGeo values are close approximations from public addresses (good to roughly block-level accuracy), not surveyed geocodes \u2014 run them through a geocoding API if you need higher precision. Added `region` + `connection` (for out-of-metro gyms rendered with a dashed spur line back to a `connectsTo` anchor gym id \u2014 see lineSystems.region for the convention) and `comps` (for climbingnoise.com comp tracking: `active` drives a pulsing-icon treatment, `eventDate` lets the UI auto-expire it, `source` should be the specific climbingnoise.com event URL, not just the homepage). Added `labelOffset` ({dx, dy}) per gym \u2014 default {10, 4} places the label to the right of the station bullet, matching standard subway-map label placement. Hand-tune per gym once labels render and you spot overlaps (e.g. GP81 / GP81 YTC, the two Chelsea Piers, the three Movement locations) \u2014 flip dx negative to place left of the station, or adjust dy to stack above/below. Split the former combined 'vital-wh-ues' entry into two real, separately-addressed gyms (vital-west-harlem, vital-upper-east-side). Added boulderingproject-gowanus (the rebranded original 2009 Brooklyn Boulders flagship site, now under the Bouldering Project brand) and brooklyn-uprising (new independent DUMBO gym, opened 2026). Both new companies added to lineSystems.company with unique MTA-family colors. Added Central Rock Gym (2 NYC locations: Manhattan and Chelsea \u2014 the Chelsea location is bouldering-only, per CRG's own FAQ). Removed chelsea-piers-brooklyn \u2014 that location does not actually offer climbing, only the Manhattan Chelsea Piers location does; chelseapiers is now a single-station company as a result. Added the first out-of-metro gyms, all on `region` !== 'nyc-metro' with a dashed `connection` back to an NYC anchor gym: Gravity Vault (Hoboken, NJ and Westbury, Long Island \u2014 note the actual Gravity Vault Jersey City location closed July 31, 2026, so Hoboken stands in for that area), Method Climbing (Newark, NJ, independent), Island Rock (Plainview, Long Island, independent), and Movement Valhalla (Hudson Valley/upstate \u2014 joins the existing 'movement' company rather than needing a new one). Note: the actual dashed-connector line rendering isn't built yet \u2014 this is data-only. Also note buildLiteralPaths' borough-ordering logic only recognizes the 5 NYC boroughs, so out-of-metro gyms (borough values like 'New Jersey', 'Long Island', 'Hudson Valley') are currently silently excluded from their company's main bundled line path until the dashed-spur rendering is built to handle them separately.",
     "colorSource": {
       "dataset": "MTA Colors \u2014 data.ny.gov",
       "url": "https://data.ny.gov/Transportation/MTA-Colors/3uhz-sej2/about_data",
@@ -76,7 +76,7 @@
         },
         {
           "id": "vital",
-          "name": "VITAL Climbing Gym",
+          "name": "VITAL Climbing",
           "color": "#008EB7",
           "shortLabel": "VT"
         },
@@ -100,7 +100,7 @@
         },
         {
           "id": "chelseapiers",
-          "name": "Chelsea Piers Fitness",
+          "name": "Chelsea Piers",
           "color": "#8E5C33",
           "shortLabel": "CP"
         },
@@ -130,7 +130,7 @@
         },
         {
           "id": "gravityvault",
-          "name": "The Gravity Vault",
+          "name": "Gravity Vault",
           "color": "#7C858C",
           "shortLabel": "GV"
         },
@@ -180,8 +180,8 @@
       "subtitle": "what's on the wall"
     },
     "region": {
-      "label": "Region",
-      "description": "Whether a gym sits within the core NYC-metro network (rendered as a normal solid line) or is an outlying gym reachable only by a dashed 'spur' connector, matching the real MTA map's treatment of NJ Transit/LIRR-style out-of-system links.",
+      "label": "Out-of-metro",
+      "description": "beyond the five boroughs",
       "lines": [
         {
           "id": "nyc-metro",
@@ -425,7 +425,7 @@
     },
     {
       "id": "vital-williamsburg",
-      "name": "VITAL Climbing Gym \u2014 Williamsburg",
+      "name": "VITAL Climbing \u2014 Williamsburg",
       "formerly": "Steep Rock Bouldering (original flagship)",
       "company": "vital",
       "borough": "Brooklyn",
@@ -484,7 +484,7 @@
     },
     {
       "id": "vital-les",
-      "name": "VITAL Climbing Gym \u2014 Lower East Side",
+      "name": "VITAL Climbing \u2014 Lower East Side",
       "formerly": null,
       "company": "vital",
       "borough": "Manhattan",
@@ -552,7 +552,7 @@
     },
     {
       "id": "vital-west-harlem",
-      "name": "VITAL Climbing Gym \u2014 West Harlem",
+      "name": "VITAL Climbing \u2014 West Harlem",
       "formerly": "Steep Rock Bouldering",
       "company": "vital",
       "borough": "Manhattan",
@@ -607,7 +607,7 @@
     },
     {
       "id": "vital-upper-east-side",
-      "name": "VITAL Climbing Gym \u2014 Upper East Side",
+      "name": "VITAL Climbing \u2014 Upper East Side",
       "formerly": "Steep Rock Bouldering",
       "company": "vital",
       "borough": "Manhattan",
@@ -931,7 +931,7 @@
     },
     {
       "id": "chelsea-piers-manhattan",
-      "name": "Chelsea Piers Fitness \u2014 Manhattan",
+      "name": "Chelsea Piers",
       "formerly": null,
       "company": "chelseapiers",
       "borough": "Manhattan",
@@ -1282,7 +1282,7 @@
     },
     {
       "id": "gravity-vault-hoboken",
-      "name": "The Gravity Vault Hoboken",
+      "name": "Gravity Vault Hoboken",
       "formerly": null,
       "company": "gravityvault",
       "borough": "New Jersey",
@@ -1509,7 +1509,7 @@
     },
     {
       "id": "gravity-vault-westbury",
-      "name": "The Gravity Vault Westbury",
+      "name": "Gravity Vault Westbury",
       "formerly": null,
       "company": "gravityvault",
       "borough": "Long Island",

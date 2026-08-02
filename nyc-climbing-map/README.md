@@ -1,6 +1,7 @@
 # NYC Climbing Map
 
 bugs:
+- mobile views not rednering? (mobile modal)
 - hover states -> delaunay? to set outer limit for hover - fix!
 - map green and main avenues? - can i even do that? * fix!
 
